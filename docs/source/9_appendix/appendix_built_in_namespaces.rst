@@ -9,8 +9,7 @@ Built-in Namespaces
 system
 ----------
 
-The system namespace handles all types of miscellaneous behaviour typically found in
-the system, such as time.
+The system namespace handles all types of miscellaneous behaviour typically found in the system, such as time.
 
 **Variables**
 

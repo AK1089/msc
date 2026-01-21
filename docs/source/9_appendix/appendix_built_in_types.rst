@@ -16,12 +16,12 @@ String. Script operators that take exactly one string (such as @player, @bypass,
 sole, @command) do not require this (for backwards compatibility and less clutter).
 
 
-.. code-block:: python
+.. code-block:: msc
 
     @player Hey
     @player "Hey"
 
-.. code-block:: console
+.. code-block:: output
 
     Hey
     "Hey"
@@ -68,11 +68,11 @@ specify the namespace, as there is no @using in chat.
 
 For example:
 
-.. code-block:: python 
+.. code-block:: msc 
 
     @player {{Player("rickyboy320")}}
 
-.. code-block:: console
+.. code-block:: output
 
     rickyboy320
 
@@ -171,7 +171,6 @@ String **substring**\(Int start, Int end)   Returns a substring starting (inclus
 String **toLowerCase**\()                   Returns the String in lowercase.
 String **toUpperCase**\()                   Returns the String in uppercase.
 String **trim**\()                          Returns the String with leading and
-
                                             trailing whitespace omitted.
 =========================================== ====================================
 
