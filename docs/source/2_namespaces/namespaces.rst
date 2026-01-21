@@ -1,49 +1,148 @@
 Namespaces
-==============
+==========
 
-Namespaces are a way of separating variables, functions and types into logical groups to prevent name collisions. In previous versions of MSC, variables were global and could easily cause collisions when using common names like ``x`` or ``count``. With namespaces, the same variable name can exist in different namespaces without conflict.
+Namespaces are a way of separating variables, functions, and types into logical groups to prevent name collisions. In previous versions of MSC, variables were global and could easily cause collisions when using common names like ``x`` or ``count``. With namespaces, the same variable name can exist in different namespaces without conflict.
 
-Generally, a namespace encapsulates a given project, a module within a project, or a logical module that can be reused in different projects (such as the ``math`` namespace, which provides mathematical functions and constants).
+Generally, a namespace encapsulates a given project, a module within a project, or a logical module that can be reused in different projects (such as the ``math`` namespace, which provides mathematical functions).
 
-.. _namespace_desc:
+.. contents:: Contents
+   :local:
 
-The Namespace
------------------------------
-
-A namespace consists of variables, functions and types. A user can define a namespace using a unique name. Within the namespace, variables can be defined to make them usable within the namespace. These are persistent variables and will be stored to file, meaning they can be re-used across scripts. Functions can also be defined within the namespace, allowing for reusable code blocks that can be called from scripts. Additionally, custom types can be defined within the namespace to create complex data structures.
-
-Before being able to use a variable, function or type, they should be defined as element of a namespace. The definition of the variable requires a type. Persistent variables have to be defined in advance so that the compiler knows where to look and what type they are. See :ref:`Variables <variables>` for more details.
-
-When using variables, functions or types in a script, the script should know what namespace the variable, function or type is in. If the namespace is undefined, it automatically defaults to the **local namespace** which contains variables that are *not persistent*. All variables within the local namespace should therefore be defined locally (that is, within the script). If using an undefined variable, the compiler will throw an error.
-
-The local namespace is also present when using a specified namespace, and always takes precedence over the specified namespace. Any variables defined within the local namespace will shadow (that is, overrule) the variable in the specified namespace. This is to make sure that an addition of a same-named variable in the namespace will not change the functionality of the script. By explicitly accessing the namespace, as described in :ref:`Best Practice <namespace_best_practice>`, you can still target the shadowed variable in the specified namespace by using the temporary namespace specifier (**::**).
-
-The local namespace is created at the start of a script, and deleted when the script terminates. Therefore the variables and types stored within the local namespace are *not persistent*.
-
-.. _namespace_using:
-
-Using Namespaces
------------------------
-
-When a script starts, it starts out with the **local namespace**. Unless defined, the local namespace contains no variables, functions or types.
-
-A script can switch namespaces at any time using the **@using** script operation. Only one namespace will be active at any time, with the exception of the local namespace, which is always active and its variables always shadow the active namespace.
-
-A variable or function can be temporarily accessed from a different namespace using the namespace specifier. A variable can be accessed using **namespace::variable**, a function using **namespace::function()**, and a type using **namespace::Type**.
-
-Note that when executing a function, the function's namespace will be used. Variables can still be supplied from a different namespace through the parameters, and the function can still access other variables using the **@using** operator and temporary namespace specifier.
-
-.. _namespace_best_practice:
-
-Best Practice
+What is a Namespace?
 --------------------
 
-When using multiple variables, functions and/or types from one namespace, it is best to use **@using**.
+A namespace is a container that holds three kinds of elements:
 
-Sometimes it is required to use multiple namespaces at the same time, such as using a variable from one namespace in a function of a different namespace. In this case you can use **@using** for the most frequently used namespace, to limit unnecessary words and characters.
+- **Variables**: Named values that can be read and modified
+- **Functions**: Reusable code blocks that can be called from scripts
+- **Types**: Custom data structures
 
-When using a namespace once, it is best to use the temporary namespace specifier (**::**) since adding additional lines would be less clear than adding the specifier.
+Before using a variable, function, or type in a script, you need to tell the script which namespace to look in. If no namespace is specified, MSC looks in the local namespace by default.
 
-It can occur that a variable with the same name is both defined in the namespace that is currently set as **@using**, and in the local namespace (that is, earlier in the script). To access the local variable, there is no need to (and you cannot) use a namespace specifier to access the variable. To access the namespace variable, you are required to use the temporary namespace specifier (**::**) to access the variable, because the local namespace shadows the variable within the specified namespace, unless explicitly using the variable from the namespace.
+The Local Namespace
+-------------------
 
-In general, it is best to use the most readable approach. **@using** is intended for repeated usage, while **::** is intended for one-time-use of namespaces.
+When a script starts executing, it begins with an empty local namespace. Variables defined within the script using ``@define`` are placed in this local namespace:
+
+.. code-block:: msc
+
+    @define Int count = 5
+    @define String message = "Hello"
+    @player {{count}}, {{message}}
+
+.. code-block:: output
+
+    5: Hello
+
+The local namespace has two important properties:
+
+1. It is not persistent. When the script finishes executing, the local namespace is deleted along with all its variables. The next time the script runs, it starts with a fresh, empty local namespace.
+
+2. It always takes precedence. If a variable exists in both the local namespace and another namespace, the local variable will be used. This is called *shadowing* and is explained further below.
+
+Persistent Namespaces
+---------------------
+
+Unlike the local namespace, user-defined namespaces are persistent. Variables stored in them are saved to disk and survive server restarts. This makes them essential for tracking state across script executions, such as player progress, puzzle states, or counters.
+
+To create a namespace, use the ``/namespace define`` command:
+
+.. code-block:: console
+
+    /namespace define <name>
+
+Namespace names should be lowercase and descriptive. Common conventions include using your map name, titling related namespaces with the same prefix, and including part of your username to avoid collisions with other mapmakers. 
+
+Once a namespace exists, variables and functions can be defined within it (see :ref:`Variables <variables>` for details on defining variables).
+
+Using Namespaces in Scripts
+---------------------------
+
+There are two ways to access elements from a namespace in your scripts: the ``@using`` operator and the ``::`` specifier.
+
+The ``@using`` operator sets a namespace as the active namespace for the rest of the script. Variables, functions, and types from that namespace can then be accessed directly by name:
+
+.. code-block:: msc
+
+    @using mymap
+    @player Your score is {{score}}
+    @var score = score + 10
+
+Without ``@using mymap``, the script would not know where to find ``score`` and would throw an error.
+
+A script can switch namespaces at any time by using ``@using`` again. Only one namespace (besides the local namespace) is active at a time.
+
+The ``::`` specifier allows you to access a specific namespace directly, without changing the active namespace:
+
+.. code-block:: msc
+
+    @player Your score is {{mymap::score}}
+    @var mymap::score = mymap::score + 10
+
+This is useful when you need to access variables from multiple namespaces in the same script, or when you only need a variable from a namespace once or twice.
+
+You can also call functions using the ``::`` specifier:
+
+.. code-block:: msc
+
+    @player The square root of 144 is {{math::sqrt(144.0D)}}
+    @player Random number: {{math::random(1.0D, 100.0D)}}
+
+You can use both approaches in the same script. A common pattern is to use ``@using`` for the namespace you access most frequently, and ``::`` for occasional access to others:
+
+.. code-block:: msc
+
+    @using mymap
+    @var score = score + 1
+    @player Score: {{score}}
+    @player Server time: {{system::currentTimeMillis()}}
+
+Shadowing
+---------
+
+The local namespace always takes precedence over the active namespace. If you define a local variable with the same name as a namespace variable, the local variable *shadows* the namespace variable:
+
+.. code-block:: msc
+
+    @using mymap
+    @define Int score = 999
+    @player Local score: {{score}}
+    @player Namespace score: {{mymap::score}}
+
+.. code-block:: output
+
+    Local score: 999
+    Namespace score: 20
+
+In this example, ``score`` refers to the local variable (999), while ``mymap::score`` explicitly accesses the namespace variable (20).
+
+This behavior ensures that adding a new variable to a namespace will never unexpectedly change the behavior of existing scripts that happen to use the same variable name locally.
+
+Function Namespaces
+-------------------
+
+When a function is called, execution switches to the function's namespace. The function can access variables from its own namespace directly, but must use ``::`` to access variables from other namespaces. Variables can be passed between namespaces through function parameters.
+
+Command Reference
+-----------------
+
+.. list-table::
+    :widths: 40 60
+    :header-rows: 1
+
+    * - Command
+      - Description
+    * - ``/namespace define <name>``
+      - Creates a new namespace.
+    * - ``/namespace remove <name>``
+      - Deletes a namespace and all its contents.
+    * - ``/namespace info <name>``
+      - Shows all variables, functions, and types in a namespace.
+    * - ``/namespace variables <name> [query]``
+      - Lists variables, optionally filtered by query.
+    * - ``/namespace functions <name> [query]``
+      - Lists functions, optionally filtered by query.
+    * - ``/namespace types <name> [query]``
+      - Lists types, optionally filtered by query.
+
+Note that these commands can only be run by admins on the main server. You will have to use the test server to run these commands yourself, or ask an admin to set up namespaces for you on the main server.
