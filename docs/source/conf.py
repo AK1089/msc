@@ -53,6 +53,9 @@ for color in '0123456789abcdef':
         # Accessing Token.X auto-creates a new token type
         MC_TOKENS[token_name] = getattr(Token, token_name)
 
+# Cache for dynamically created hex color tokens
+HEX_TOKEN_CACHE = {}
+
 
 class MinecraftOutputLexer(Lexer):
     """Lexer for Minecraft chat output with formatting codes."""
@@ -60,7 +63,8 @@ class MinecraftOutputLexer(Lexer):
     aliases = ['output', 'mcoutput']
 
     def get_tokens_unprocessed(self, text):
-        color = 'f'  # Default white
+        color = 'f'  # Default white (standard code)
+        hex_color = None  # Custom hex color (e.g., 'FF7382')
         bold = False
         italic = False
         underline = False
@@ -73,11 +77,12 @@ class MinecraftOutputLexer(Lexer):
             # Newlines reset formatting (each line is independent in MC chat)
             if text[i] == '\n':
                 if buf:
-                    token = self._get_token(color, bold, italic, underline)
+                    token = self._get_token(color, hex_color, bold, italic, underline)
                     yield buf_start, token, buf
                     buf = ''
                 yield i, Text, '\n'
                 color = 'f'
+                hex_color = None
                 bold = italic = underline = False
                 i += 1
                 buf_start = i
@@ -86,13 +91,26 @@ class MinecraftOutputLexer(Lexer):
 
                 # Flush buffer with current formatting
                 if buf:
-                    token = self._get_token(color, bold, italic, underline)
+                    token = self._get_token(color, hex_color, bold, italic, underline)
                     yield buf_start, token, buf
                     buf = ''
 
+                # Check for hex color code: &#RRGGBB (8 chars total)
+                if code == '#' and i + 8 <= len(text):
+                    potential_hex = text[i + 2:i + 8]
+                    if all(c in '0123456789abcdefABCDEF' for c in potential_hex):
+                        # Valid hex color - resets formatting like standard colors
+                        hex_color = potential_hex.upper()
+                        color = None  # Clear standard color
+                        bold = italic = underline = False
+                        i += 8
+                        buf_start = i
+                        continue
+
                 if code in MC_COLORS:
-                    # Color resets all formatting
+                    # Standard color resets all formatting and clears hex
                     color = code
+                    hex_color = None
                     bold = italic = underline = False
                     i += 2
                     buf_start = i
@@ -110,6 +128,7 @@ class MinecraftOutputLexer(Lexer):
                     buf_start = i
                 elif code == 'r':
                     color = 'f'
+                    hex_color = None
                     bold = italic = underline = False
                     i += 2
                     buf_start = i
@@ -122,18 +141,34 @@ class MinecraftOutputLexer(Lexer):
 
         # Flush remaining buffer
         if buf:
-            token = self._get_token(color, bold, italic, underline)
+            token = self._get_token(color, hex_color, bold, italic, underline)
             yield buf_start, token, buf
 
-    def _get_token(self, color, bold, italic, underline):
-        name = f'Mc{color}'
-        if bold:
-            name += 'l'
-        if italic:
-            name += 'o'
-        if underline:
-            name += 'n'
-        return MC_TOKENS.get(name, Text)
+    def _get_token(self, color, hex_color, bold, italic, underline):
+        if hex_color:
+            # Build token name encoding hex color and formatting
+            # Format: McHexRRGGBB or McHexRRGGBBl, McHexRRGGBBlo, etc.
+            name = f'McHex{hex_color}'
+            if bold:
+                name += 'l'
+            if italic:
+                name += 'o'
+            if underline:
+                name += 'n'
+            # Dynamically create token if not cached
+            if name not in HEX_TOKEN_CACHE:
+                HEX_TOKEN_CACHE[name] = getattr(Token, name)
+            return HEX_TOKEN_CACHE[name]
+        else:
+            # Standard color code
+            name = f'Mc{color}'
+            if bold:
+                name += 'l'
+            if italic:
+                name += 'o'
+            if underline:
+                name += 'n'
+            return MC_TOKENS.get(name, Text)
 
 lexers['output'] = MinecraftOutputLexer()
 
@@ -144,8 +179,8 @@ class MSCLexer(RegexLexer):
 
     tokens = {
         'root': [
-            # Comments (lines starting with #)
-            (r'#.*$', Comment.Single),
+            # Comments (only at start of line, with optional leading whitespace)
+            (r'^\s*#.*$', Comment.Single),
             # Operators at start of line (@word)
             (r'^(\s*)(@\w+)', bygroups(Text.Whitespace, Keyword)),
             # Expressions in {{ }}
@@ -176,6 +211,25 @@ class MSCLexer(RegexLexer):
     }
 
 lexers['msc'] = MSCLexer()
+
+class ConsoleLexer(RegexLexer):
+    """Simple lexer for Minecraft/MSC console commands."""
+    name = 'Console'
+    aliases = ['console', 'mcconsole']
+
+    tokens = {
+        'root': [
+            # Commands starting with /
+            (r'/\w+', Name.Function),
+            # Numbers
+            (r'-?\b\d+(\.\d+)?\b', Number),
+            # Everything else
+            (r'[^/\d]+', Text),
+            (r'.', Text),
+        ],
+    }
+
+lexers['console'] = ConsoleLexer()
 
 # -- Custom RST roles for Minecraft formatting
 from docutils import nodes
@@ -209,8 +263,14 @@ templates_path = ['_templates']
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
+html_theme_options = {
+    'navigation_depth': 4,
+    'collapse_navigation': False,
+    'titles_only': False,
+}
 html_static_path = ['_static']
 html_css_files = ['minecraft.css']
+html_js_files = ['minecraft.js']
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
