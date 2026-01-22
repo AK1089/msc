@@ -1,157 +1,221 @@
 .. _variables:
 
 Variables
-================
+=========
 
-Variables are the objects that can be adjusted to make a process behave differently. A process without variables yields the same result every time. Variables have certain characteristics defined by their type. The type defines what a variable can do and restricts what variable can be passed to functions. Variables can be manually set and/or changed through operators.
+Variables are named containers that store values. A script without variables produces the same result every time it runs. Variables allow scripts to track state, respond to conditions, and produce different outcomes based on data.
 
-.. contents::
+Every variable has a name that identifies it within its namespace. Variables also have a type that determines what kind of value they can hold and which operations can be performed on them.
 
-.. _variables_types:
+.. contents:: Contents
+   :local:
 
-Types
---------------------
+Names and Types
+---------------
 
-Variables do not have a strict feature set. They are simply name tags for a value, to which a new value can be attached. The Type is what determines in what format the value is stored and what operations can be performed on the value.
+The type of a variable determines how its value is stored and what can be done with it. When defining a variable, the type always appears immediately before the variable name:
 
-Whenever a variable is defined, the Type is always the word immediately preceding the variable's name. For example, the variable *name* defined as:
-
-.. code-block:: console
+.. code-block:: msc
 
     @define String name
+    @define Int count
+    @define Boolean found
 
-has the type *String* (see :ref:`Built-in Types <appendix_built_in_types>` for more information on the String type). The type both represents how the variable can be instantiated and how it can be used.
+In these examples, ``name`` has type ``String``, ``count`` has type ``Int``, and ``found`` has type ``Boolean``. Note that every variable name can only contain letters, digits, and underscores, and must start with a lowercase letter.
 
-.. _variables_builtin_types:
+MSC provides a set of built-in types that can be used from any namespace. The primitive types are:
 
-Built-in Types
----------------------
+- **String**: Plain text written in double quotes like ``"Hello"``.
+- **Int**: A whole number from :math:`-2^{31}` to :math:`2^{31}-1`, like ``42`` or ``-7``.
+- **Long**: A larger whole number from :math:`-2^{63}` to :math:`2^{63}-1`, written with an L suffix like ``100L``.
+- **Float**: A decimal number like ``3.14`` or ``-0.5``.
+- **Double**: A more precise decimal, written with a D suffix like ``3.14159265358979D``.
+- **Boolean**: Either ``true`` or ``false``.
 
-MSC 2 comes with a set of predefined types which can be used at any time from any namespace. User defined types can build on top of these to further expand functionality, or represent an entire different structure.
+MSC also provides types for interacting with the Minecraft world:
 
-As of version 2.0, MSC contains:
+- **Player**: Represents a Minecraft player.
+- **Entity**: Represents any Minecraft entity (mobs, armor stands, etc.).
+- **Block**: Represents a block in the world.
+- **Location**: A position in a world (with decimal x, y, z coordinates and a world).
+- **BlockLocation**: A block position in a world (with integer x, y, z coordinates and a world).
+- **Position**: A Location with yaw and pitch (direction).
+- **Vector2** and **Vector3**: A 2D and 3D vector of Doubles.
+- **BlockVector2** and **BlockVector3**: A 2D and 3D vector of Ints.
+- **Region**: Represents a WorldGuard region or a custom region.
 
-.. list-table::
-    :widths: 20 80
-    :header-rows: 0
-
-    * - String
-      - Plain text. Commands passed to @bypass, @command, @console and @player must be of this type.
-    * - Int
-      - A signed integer. Represents whole positive and negative numbers. Can represent values from -2³¹ through 2³¹-1.
-    * - Long
-      - A signed integer. Represents more values than an Int can. Can represent values from -2⁶³ through 2⁶³-1. Generally not necessary until the Int does not suffice.
-    * - Float
-      - A single-precision floating point number. Can represent a wide range of decimals (but sometimes suffers from being unable to represent a number exactly).
-    * - Double
-      - A double-precision floating point number. Can represent a wider range of decimals than Float can (but still not all). For general purposes, Float is likely enough, but if it is not, Double can represent more precise state when needed, such as when doing precise maths.
-    * - Boolean
-      - Can either be *true* or *false*. Used to keep track of conditions.
-    * - Player
-      - Represents the Minecraft Player. Contains a wide range of utility functions and access to player statistics and variables. Can be used to directly read and alter a Player state, to some extent.
-    * - Entity
-      - Represents a Minecraft Entity. Contains a wide range of utility functions to read and alter the Entity state, to some extent.
-    * - Block
-      - Represents a Minecraft Block. Contains information about a block and ways to alter it, to some extent.
-    * - Location
-      - Represents a position in a world.
-    * - BlockLocation
-      - Represents a position of a block in a world.
-    * - Position
-      - Similar to Location, but has yaw and pitch.
-    * - Vector3
-      - A 3 dimensional vector of Doubles.
-    * - Vector2
-      - A 2 dimensional vector of Doubles.
-    * - BlockVector3
-      - A 3 dimensional vector of Ints.
-    * - BlockVector2
-      - A 2 dimensional vector of Ints.
-    * - Region
-      - Can either be used to represent existing WorldGuard regions in the world, or you can create your own region.
-
-For a more detailed list on what functions and variables each of these types expose, see :ref:`Built-in Types <appendix_built_in_types>`.
-
-.. _variables_literals:
+For a complete reference of all methods and constructors for each type, see :ref:`Built-in Types <appendix_built_in_types>`.
 
 Literals
----------------------
+--------
 
-.. list-table::
-    :widths: 15 85
-    :header-rows: 0
+A literal is a value written directly in code. Each primitive type has its own literal syntax:
 
-    * - String
-      - ``"Content of the string"`` - text contained between two ``"`` characters. If a String has to contain a ``"`` character, use the escape character: ``\``. Example: ``"This is in the string: \" "``
-    * - Int
-      - ``1`` - any integer
-    * - Long
-      - ``1L`` - an integer followed by L
-    * - Float
-      - ``1.0`` - any decimal
-    * - Double
-      - ``1.0D`` - any decimal followed by D
-    * - Boolean
-      - ``true`` or ``false``
+.. code-block:: msc
 
-Note that Block, Player and Entity have no literals. They always require constructors to instantiate the state. User-defined types can be instantiated in the same way, taking parameters as required.
+    @define String name = "Steve"
+    @define Int count = 42
+    @define Long bigNumber = 9999999999999L
+    @define Float ratio = 0.75
+    @define Double precise = 3.14159265358979D
+    @define Boolean active = true
 
-.. _variables_qualifiers:
+Strings are enclosed in double quotes. To include a quote character inside a string, escape it with a backslash: ``"He said \"hello\""``.
+
+Ints and Floats are written as plain numbers. Longs require an ``L`` suffix, and Doubles require a ``D`` suffix. Without these suffixes, ``42`` is an Int and ``3.14`` is a Float.
+
+Complex types like Player, Entity, and Block do not have literals. They must be created using constructors:
+
+.. code-block:: msc
+
+    @define Player p = Player("Rickyboy320")
+    @define Block b = Block(100, 64, -200, "Theta")
+
+Defining Variables
+------------------
+
+There are two ways to define variables: locally within a script using ``@define``, or persistently within a namespace using the ``/variable define`` command.
+
+Local variables are created with the ``@define`` operator:
+
+.. code-block:: msc
+
+    @define Int count = 0
+    @define String message = "Hello"
+
+These exist only while the script is running. When the script finishes, they are deleted. The next time the script runs, it starts fresh with no memory of previous values.
+
+Persistent variables are created with the ``/variable define`` command and stored in a namespace:
+
+.. code-block:: console
+
+    /variable define <namespace> [qualifiers] <Type> <name> [= expression]
+
+For example:
+
+.. code-block:: console
+
+    /variable define mymap Int score = 0
+    /variable define mymap String secretWord = "banana"
+    /variable define mymap Boolean doorOpen = false
+
+These variables persist across script executions and server restarts. They can be accessed from any script that uses the namespace (see :ref:`Namespaces <namespaces>` for details on ``@using`` and the ``::`` specifier).
+
+If no initial value is provided, variables are initialized to their default state: ``0`` for numeric types, ``""`` for String, ``false`` for Boolean, and ``null`` for complex types.
+
+Modifying Variables
+-------------------
+
+Use the ``@var`` operator to change a variable's value:
+
+.. code-block:: msc
+
+    @define Int count = 0
+    @var count = 20
+    @var count = count + 1
+    @var count = count * 2
+    @player The count is {{count}}
+
+.. code-block:: output
+
+    The count is 42
+
+The ``@var`` operator can modify both local variables and namespace variables (when using ``@using`` or the ``::`` specifier):
+
+.. code-block:: msc
+
+    @using mymap
+    @var score = score + 10
+    @var othermap::counter = othermap::counter + 1
+
+When modifying a variable using its own value, you can use the shorthand ``+=``, ``-=``, ``*=`` etc.:
+
+.. code-block:: msc
+
+    @define Int count = 5
+    @var count += 3
+    @player The count is {{count}} (&acount += 3&r is the same as &acount = count + 3&r)
+
+.. code-block:: output
+
+    The count is 8, since &acount += 3&r is the same as &acount = count + 3&r.
 
 Qualifiers
----------------------
+----------
 
-When defining a new type or namespace, sometimes it is useful to have variables that are player relative, or a variable that has a constant value. Persistent variables can be qualified by qualifier keywords that determine their behaviour. Where the type determines what can be done with the value of the variable, the qualifier determines what properties the variable itself has. As of MSC 2.0 there are two qualifiers:
+Persistent variables (those defined with ``/variable define``) can have two qualifiers that modify their behavior. Qualifiers are placed between the namespace and the type.
 
-.. list-table::
-    :widths: 15 85
-    :header-rows: 0
-
-    * - final
-      - A constant variable. Once initialized cannot be changed. Useful for more clear scripts, and makes changing values more maintainable.
-    * - relative
-      - A variable that is player-bound. This is MSC 2's way of defining per-player variables, rather than shared variables.
-
-.. _variables_usage:
-
-Usage
---------------------------
-
-As described in the previous sections, variables consist of one or more qualifiers, a type and a changeable value. Through commands, variables can be defined and operated upon. The main commands are:
+The ``final`` qualifier creates a constant that cannot be changed after initialization:
 
 .. code-block:: console
 
-    /variable define <namespace> [qualifier [...]] <Type> <name> [= expression]
+    /variable define mymap final Double pi = 3.14159D
+
+Attempting to modify a final variable in a script will cause an error. This is useful for values that should never change, and makes scripts more maintainable since the value is defined in one place.
+
+.. code-block:: msc
+
+    @var mymap::pi = 3.0D
+
+.. code-block:: output
+
+    &7[&eScripts&7] &eVariable 'final Double pi' is declared final and can
+    &etherefore not be assigned a new value.
+
+The ``relative`` qualifier creates a per-player variable. Instead of all players sharing one value, each player gets their own independent copy:
 
 .. code-block:: console
 
-    /variable set <namespace> <name> = <expression>
+    /variable define mymap relative Int checkpoint = 0
+    /variable define mymap relative Boolean completedTutorial = false
 
-In scripts this can be written shorter:
+Without ``relative``, if one player sets ``score`` to 100, all players see 100. With ``relative``, each player has their own ``score`` that starts at the default value and changes independently.
 
-.. code-block:: console
-
-    @define <Type> <name> [= expression]
-
-and
-
-.. code-block:: console
-
-    @var [name =] <expression>
-
-- *namespace* is where you define which namespace is being altered.
-- *[qualifier [...]]* is where you define any amount of qualifiers. These are not present in scripts because variables in scripts are not persistent.
-- *Type* is where you define the Type of the variable. The Type has to be an already defined Type within the namespace. (If using an external type, use ``::`` to indicate the namespace it comes from). Type names always start with an uppercase character.
-- *name* is where you define the name of the variable. Choose a descriptive name that makes clear what the variable is used for. Variable names may not begin with an uppercase character.
-- *expression* is how you first initialize the variable. Note that when using a final variable, this field is required. Otherwise, this can be left blank, to initialize the variable to their default state. (See :ref:`Built-in Types <appendix_built_in_types>` for the default states of each type). For user-defined variables this will be null. See :ref:`Expressions <expressions>` for more information on how to build an expression.
-
-.. _variables_null:
+Relative variables with a default value can be reset to that value using ``/variable reset``:
 
 Null
---------------------------
+----
 
-Types that do not have a default state can sometimes be null. Null means multiple things, taking the form of 'unrepresentable', 'undefined', and 'non-existent'. As became apparent in the previous section a variable can be defined without expression, automatically taking on the default state. User-defined variables do not have a default state, and therefore automatically take the value null.
+Some variables can have the value ``null``, which represents the absence of a value. This occurs in two situations:
 
-Some functions are unable to return a meaningful result. For example the Player() constructor can only return a Player if the player exists. If the Player is not online, it cannot return a meaningful result and thus returns null.
+1. A complex type (like Player, Entity, or a user-defined type) is defined with no initial value.
 
-The reader should be aware that this case can occur. Performing operations on and with null variables will cause the script to fail with a NullPointerException. It is wise to keep track of the variables that can become null and script defensively. The script cannot make assumptions to what behaviour is wanted when the value is undefined, and therefore it should always be explicitly stated.
+2. A function or constructor fails to return a meaningful result. For example, ``Player("nonexistent")`` returns null if no player by that name is online.
+
+Performing operations on a null value often causes the script to fail with a NullPointerException. To avoid this, check for null before using a variable that might be null:
+
+.. code-block:: msc
+
+    @define Player target = Player("someone")
+    @if target != null
+        @player Found the player!
+        @bypass /give {{target}} diamond 1
+    @else
+        @player That player is not online.
+    @fi
+
+Be careful when dealing with constructors that might fail, such as ``Player()`` for offline players or ``Block()`` for unloaded chunks. These might return null, so always check before using the result.
+
+Command Reference
+-----------------
+
+.. list-table::
+    :widths: 40 60
+    :header-rows: 1
+
+    * - Command
+      - Description
+    * - ``/variable define <namespace> [qualifiers] <Type> <name> [= expr]``
+      - Creates a new variable in a namespace.
+    * - ``/variable remove <namespace> <variable>``
+      - Deletes a variable from a namespace.
+    * - ``/variable info <namespace> <variable>``
+      - Shows information about a variable.
+    * - ``/variable set <namespace> <variable> = <expression>``
+      - Sets a variable's value (bypasses ``final``).
+    * - ``/variable set <player> <namespace> <variable> = <expression>``
+      - Sets a relative variable for a specific player.
+    * - ``/variable reset <namespace> <variable>``
+      - Resets a relative variable to its default value for everyone.
+
+Note that these commands can only be run by admins on the main server. You will have to use the test server to run these commands yourself, or ask an admin to set up variables for you on the main server.
