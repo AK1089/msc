@@ -185,8 +185,6 @@ class MSCLexer(RegexLexer):
             (r'^(\s*)(@\w+)', bygroups(Text.Whitespace, Keyword)),
             # Expressions in {{ }}
             (r'\{\{', Punctuation, 'expression'),
-            # Strings
-            (r'"[^"]*"', String),
             # Everything else
             (r'.', Text),
             (r'\n', Text.Whitespace),
@@ -207,6 +205,8 @@ class MSCLexer(RegexLexer):
             (r'\w+', Name),
             # Whitespace
             (r'\s+', Text.Whitespace),
+            # Catch-all for anything else (quotes, etc.)
+            (r'.', Text),
         ],
     }
 

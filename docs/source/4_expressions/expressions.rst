@@ -1,151 +1,373 @@
 .. _expressions:
 
 Expressions
-===================================
+===========
 
-Expressions describe manipulations on variables with functions, operators and variables. They follow a few rules, but can be completely freely made as seen fit to the context. Expressions range from very short assignments to complex logic that can be stored or used further in the script, or used to perform an action themselves. They are the foundation of variables, giving the user many ways to manipulate and handle data.
+Expressions are pieces of code that compute values. They combine variables, literals, operators, and function calls to produce a result. Expressions are the foundation of all computation in MSC, from simple arithmetic to complex logic.
 
-.. _expression_intro:
+.. contents:: Contents
+   :local:
 
-The Expression
-----------------------------------
+What is an Expression?
+----------------------
 
-In the simplest sense, an expression is a piece of text that describes what to do. In the context of scripts, expressions are used to perform actions (functions) or manipulate variables (operators), or these two combined.
+An expression is anything that evaluates to a value. The simplest expressions are just literals or variables:
 
-Expressions always evaluate toward one or no value. An expression ending in a function call with no return type will result in no value. Other expressions will always result in one value of a static type.
+.. code-block:: msc
 
-This static type can in turn be used in a different part of the expression, and so on. They can also be stored in a variable of the correct type.
+    @player {{5}}
+    @player {{"Hello"}}
+    @player {{mymap::score}}
 
-Some examples of simple expressions are:
+.. code-block:: output
+
+    5
+    Hello
+    10
+
+More complex expressions combine values with *operators*:
 
 .. code-block:: msc
 
     @player {{5 + 5}}
-    @player {{10 / 5}}
-    @player {{"Hello" + "World"}}
+    @player {{mymap::score * 2}}
+    @player {{mymap::score > 8 && true}}
 
 .. code-block:: output
 
     10
-    2
-    HelloWorld
+    20
+    true
 
-
-Expressions can also be chained or nested:
-
-.. code-block:: msc
-
-    @player {{"Hello" + "World" + 5 + 5}}
-    @player {{(5 + 5) * (5 + 5)}}
-    @var player.setMaxHealth(5 + 5)
-
-.. code-block:: output
-
-    HelloWorld
-    100
-
-As described in :ref:`Execution Order <expressions_execution_order>`, some operators take precedence over others, such as the ``*`` operator taking precedence over the ``+`` operator. If operators have the same precedence, the expression is evaluated from left to right. The above example: ``"Hello" + "World" + 5 + 5`` therefore evaluates to ``"HelloWorld55"``.
-
-You may be confused why it is not ``"HelloWorld10"``. The ``+`` operator has equal precedence whether it is used for a String or an Int. Reading left to right, first ``Hello`` and ``World`` are concatenated by the ``+`` operator, then ``HelloWorld + 5`` is evaluated, which results in ``HelloWorld5`` (because String + Int = String), then ``HelloWorld5 + 5`` is evaluated, resulting in ``HelloWorld55``.
-
-Before a function is called, each of the parameters are first processed. This happens the same way as a normal expression. Thus ``player.setMaxHealth(5 + 5)`` evaluates to ``player.setMaxHealth(10)`` after which the function is successfully called.
-
-Sometimes you may accidentally write an expression that does not work. For example, you write:
+Expressions can also include function or method calls:
 
 .. code-block:: msc
 
-    @var Block(5, 5, 5, "Zero") + 5
+    @player {{math::sqrt(16.0D)}}
+    @player {{"hello".toUpperCase()}}
 
 .. code-block:: output
 
-    Operator '+' is not applicable on types: Block, Int
+    4.0
+    HELLO
 
-Because Block has no ``+`` operator, this expression cannot complete, and will error. Sometimes this may be less apparent because of chained expressions. In general it is smart to keep your expressions as simple as possible, often preferring the most readable solution.
+The {{ }} Syntax
+----------------
 
-.. _expressions_execution_order:
+Expressions in MSC are written inside double curly braces: ``{{ }}``. This syntax can be used in two places. Firstly, in script operators like ``@player``, and ``@bypass``, expressions are evaluated and their results are inserted into the text:
 
-Execution Order
--------------------------------
+.. code-block:: msc
 
-Chained expressions have an execution order. You are probably used to this in maths as well: ``*`` comes before ``+``, but ``+`` and ``-`` happen at the same time (in our case from left to the right). Expressions also follow these simple rules. The operators with higher precedence are executed first, and operators with same precedence are executed left to right.
+    @define Int x = 5
+    @player The value of x is {{x}}
+    @player Double that is {{x * 2}}
+    @bypass /teleport @s {{x * 5}} 64 {{x + 10}}
 
-Expressions have a few more operators than those generally used in maths however, and we will list the execution order here. From top to bottom, top executes first, and bottom executes last.
+.. code-block:: output
 
-.. list-table:: Precedence of operators
+    The value of x is 5
+    Double that is 10
+
+The last line becomes ``/teleport @s 25 64 15`` after the expressions are evaluated, and this is where the player will be teleported.
+
+Secondly, expressions can be embedded inside string literals:
+
+.. code-block:: msc
+
+    @define String message = "The answer is {{5 + 5}}"
+    @player {{message}}
+
+.. code-block:: output
+
+    The answer is 10
+
+This is useful for building complex strings that include computed values.
+
+Operators
+---------
+
+Operators combine values to produce new values. MSC supports arithmetic, comparison, logical, and assignment operators.
+
+Arithmetic Operators
+^^^^^^^^^^^^^^^^^^^^
+
+Arithmetic operators work on numbers:
+
+.. code-block:: msc
+
+    @player {{10 + 3}}, {{10 - 3}}, {{10 * 3}}
+    @player {{10 / 3}, {{10 % 3}}
+    @player {{2 ^ 8}}
+
+.. code-block:: output
+
+    13, 7, 30
+    3, 1
+    256.0
+
+The ``^`` operator is exponentiation: ``2 ^ 8`` computes :math:`2^8 = 256`. This returns a Double, rather than an integer.
+
+The ``%`` operator is modulo (which computes remainder after division). Division between two integers produces an integer result (truncated). To get a decimal result, use a Float or Double:
+
+.. code-block:: msc
+
+    @player {{10 / 3}} (integer) vs {{10.0 / 3.0}} (precise)
+
+.. code-block:: output
+
+    3 (integer) vs 3.3333333 (precise)
+
+The ``+`` operator can also be used to concatenate strings:
+
+.. code-block:: msc
+
+    @player {{"Hello" + " " + "World"}}
+    @player {{"Score: " + 100}}
+
+.. code-block:: output
+
+    Hello World
+    Score: 100
+
+When a string is added to a number, the number is converted to a string.
+
+Comparison Operators
+^^^^^^^^^^^^^^^^^^^^
+
+Comparison operators compare values and return a Boolean:
+
+.. code-block:: msc
+
+    @player {{5 > 3}}
+    @player {{5 < 3}}
+    @player {{5 >= 5}}
+    @player {{5 <= 4}}
+    @player {{5 == 5}}
+    @player {{5 != 3}}
+
+.. code-block:: output
+
+    true
+    false
+    true
+    false
+    true
+    true
+
+Note that ``==`` checks for equality of value, while ``!=`` checks for inequality. Make sure to use double equals for comparison, as a single equals sign is used to set the value of a variable.
+
+Logical Operators
+^^^^^^^^^^^^^^^^^
+
+Logical operators combine Boolean values:
+
+.. code-block:: msc
+
+    @player {{true && true}}
+    @player {{true && false}}
+    @player {{true || false}}
+    @player {{false || false}}
+    @player {{!true}}
+
+.. code-block:: output
+
+    true
+    false
+    true
+    false
+    false
+
+The ``&&`` operator is logical AND (true if both sides are true). The ``||`` operator is logical OR (true if either side is true). The ``!`` operator negates a Boolean.
+
+Assignment Operators
+^^^^^^^^^^^^^^^^^^^^
+
+Assignment operators are used with ``@var`` to modify variables:
+
+.. code-block:: msc
+
+    @define Int x = 10
+    @var x += 5
+    @player {{x}}
+    @var x -= 3
+    @player {{x}}
+    @var x *= 2
+    @player {{x}}
+
+.. code-block:: output
+
+    15
+    12
+    24
+
+The operators ``+=``, ``-=``, ``*=``, ``/=``, and ``%=`` are shorthand. For example, ``x += 5`` is equivalent to ``x = x + 5``.
+
+Incorrect Operators
+^^^^^^^^^^^^^^^^^^^
+
+Sometimes an operator is used with incompatible types. This causes an error:
+
+.. code-block:: msc
+
+    @player {{Player("Ajdj123321") + true}}
+
+.. code-block:: output
+
+    &7[&eScripts&7] &eOperator &f'+' &eis not applicable on types: &fPlayer&e, &fBoolean
+
+This means that you can't add a Player and a Boolean together (which makes sense: what would that even mean?). When in doubt, keep expressions simple and use parentheses to make the evaluation order explicit.
+
+Operator Precedence
+-------------------
+
+When an expression contains multiple operators, they are evaluated in a specific order. Operators with higher precedence are evaluated first. Operators with the same precedence are evaluated left to right. You can override precedence using parentheses.
+
+You are probably familiar with standard arithmetic precedence from mathematics, where multiplication comes before addition. MSC follows similar rules, with some additions for logical and assignment operators.
+
+From highest to lowest precedence:
+
+.. list-table::
     :widths: 20 80
-    :header-rows: 0
+    :header-rows: 1
 
+    * - Operator
+      - Description
     * - ``()``
-      - Parentheses around an expression prioritize this sub-expression.
+      - Parentheses (used to override the default precedence)
     * - ``!``
-      - Negation of Booleans.
+      - Logical NOT (turning true to false and vice versa)
     * - ``^``
-      - Exponentiation.
-    * - ``*``, ``%``, ``/``
-      - Multiplication, modulo, division.
+      - Exponentiation (raising to a power)
+    * - ``*``, ``/``, ``%``
+      - Multiplication, division, modulo
     * - ``+``, ``-``
-      - Addition, concatenation and subtraction.
+      - Addition/concatenation, subtraction
     * - ``<``, ``<=``, ``>``, ``>=``
-      - Relational operators.
+      - Comparison (less than, greater than, and their non-strict variants)
     * - ``==``, ``!=``
-      - Equality or non-equality.
+      - Equality and inequality
     * - ``&&``
-      - Logical AND.
+      - Logical AND (both sides must be true)
     * - ``||``
-      - Logical OR.
-    * - ``=``
-      - Assignment.
+      - Logical OR (at least one side must be true)
+    * - ``=``, ``+=``, etc.
+      - Assignment (evaluated last)
 
 For example:
 
 .. code-block:: msc
 
-    @player {{5 - 5 * 5}}
-    @player {{5 > 10 && 4 != 4 || 5 == 5}}
+    @player {{5 + 3 * 2}}
+    @player {{(5 + 3) * 2}}
 
 .. code-block:: output
 
-    -20
-    true
+    11
+    16
 
-The first one is fairly logical following basic math. The second may be harder to see at first. Due to the operator precedences, the expression is evaluated as ``((5>10) && (4 != 4)) || (5 == 5)``. This in turn evaluates to ``((false) && (false)) || (true)``, which corresponds with ``false || true``, which is ``true``.
+In the first expression, ``3 * 2`` is evaluated first (giving 6), then ``5 + 6`` gives 11. In the second, the parentheses force ``5 + 3`` to be evaluated first.
 
-.. _expressions_short_circuit:
-
-Short Circuit
------------------------------
-
-In the case of the logical operators, the expression will short circuit whenever the expression has gathered enough info about the result. For example, assuming ``function()`` returns a Boolean:
+A more complex example:
 
 .. code-block:: msc
 
-    @var true || function()
+    @player {{5 > 3 && 2 < 4 || false}}
 
-will never execute *function*, because the first operand was already true.
+This evaluates as ``((5 > 3) && (2 < 4)) || false``, which becomes ``(true && true) || false``, which is ``true``.
 
-One of the most important reasons for this feature is the usage in if statements:
+Short-Circuit Evaluation
+------------------------
+
+The logical operators ``&&`` and ``||`` use short-circuit evaluation. This means they stop evaluating as soon as the result is determined.
+
+For ``&&``, if the left side is false, then the expression will be false regardless of the right side (as ``false && false`` and ``false && true`` are both false). Therefore, the compiler skips even checking what the right side is. This can have consequences if the right side has side effects (like function calls).
 
 .. code-block:: msc
 
-    @define String var
-    @if var != null && var.toLowerCase() == "this is a string"
-        @player Incorrect.
-    @else
-        @player Correct!
+    @define Boolean result = false && namespace::someExpensiveFunction()
+
+The function is never called because ``false && anything`` is always false.
+
+For ``||``, if the left side is true, the right side is never evaluated:
+
+.. code-block:: msc
+
+    @define Boolean result = true || someExpensiveFunction()
+
+The function is never called because ``true || anything`` is always true.
+
+This behavior is especially useful for null checks:
+
+.. code-block:: msc
+
+    @define Player target = Player("someone")
+    @if target != null && target.getHealth() > 0
+        @player Target is alive!
+    @fi
+
+If ``target`` is null, the ``&&`` short-circuits and ``target.getHealth()`` is never called. This prevents a NullPointerException. Without short-circuit evaluation, checking for null and using the variable would require separate ``@if`` statements.
+
+Type Behavior
+-------------
+
+Operators behave differently depending on the types of their operands. Understanding this helps avoid unexpected results.
+
+Arithmetic on integers produces integers:
+
+.. code-block:: msc
+
+    @player {{7 / 2}}
 
 .. code-block:: output
 
-    Correct!
+    3
 
-It will never evaluate the right side of the logical AND, because the left side was already false, saving you from a NullPointerException being thrown during the execution of the script. This will save some lines of code to check if something is null, and almost always results in predictable behaviour.
+To get a decimal result, at least one operand must be a Float or Double:
 
-.. _expressions_section_syntax:
+.. code-block:: msc
 
-Syntax
----------------------
+    @player {{7.0 / 2}}
+    @player {{7 / 2.0D}}
 
-Expressions follow fairly strict, but very logical syntax rules. We will list all syntax rules here with examples. For a more summarized list, refer to :ref:`Syntax <appendix_syntax>`.
+.. code-block:: output
 
-.. toctree::
+    3.5
+    3.5
 
-   expressions_syntax
+String concatenation with ``+`` converts non-strings automatically:
+
+.. code-block:: msc
+
+    @player {{"Value: " + 42}}
+    @player {{"Is active: " + true}}
+
+.. code-block:: output
+
+    Value: 42
+    Is active: true
+
+However, the order matters. Expressions are evaluated left to right:
+
+.. code-block:: msc
+
+    @player {{1 + 2 + " apples"}}
+    @player {{"apples: " + 1 + 2}}
+
+.. code-block:: output
+
+    3 apples
+    apples: 12
+
+In the first example, ``1 + 2`` is evaluated first (giving 3), then ``3 + " apples"`` produces the string. In the second, ``"apples: " + 1`` produces ``"apples: 1"``, then adding 2 gives ``"apples: 12"``.
+
+Not all types support all operators. Attempting an unsupported operation causes an error:
+
+.. code-block:: msc
+
+    @player {{Block(0, 0, 0, "world") + 5}}
+
+.. code-block:: output
+
+    Operator '+' is not applicable on types: Block, Int
+
+When in doubt, keep expressions simple and use parentheses to make the evaluation order explicit.
