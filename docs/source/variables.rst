@@ -26,8 +26,8 @@ In these examples, ``name`` has type ``String``, ``count`` has type ``Int``, and
 MSC provides a set of built-in types that can be used from any namespace. The primitive types are:
 
 - **String**: Plain text written in double quotes like ``"Hello"``.
-- **Int**: A whole number from :math:`-2^{31}` to :math:`2^{31}-1`, like ``42`` or ``-7``.
-- **Long**: A larger whole number from :math:`-2^{63}` to :math:`2^{63}-1`, written with an L suffix like ``100L``.
+- **Int**: A whole number from :math:`-2^{31}` to :math:`2^{31}-1` (about 2 billion) like ``42`` or ``-7``.
+- **Long**: A larger integer from :math:`-2^{63}` to :math:`2^{63}-1` (about 9 quintillion), with an L suffix like ``100L``.
 - **Float**: A decimal number like ``3.14`` or ``-0.5``.
 - **Double**: A more precise decimal, written with a D suffix like ``3.14159265358979D``.
 - **Boolean**: Either ``true`` or ``false``.
@@ -83,7 +83,7 @@ Local variables are created with the ``@define`` operator:
     @define Int count = 0
     @define String message = "Hello"
 
-These exist only while the script is running. When the script finishes, they are deleted. The next time the script runs, it starts fresh with no memory of previous values.
+These exist only while the script is running. When the script finishes, they are deleted. The next time the script runs, it starts fresh with no memory of previous values. Note that the local namespace sometimes comes pre-loaded with variables like ``player``, ``block``, and ``entity`` that represent the context in which the script is running.
 
 Persistent variables are created with the ``/variable define`` command and stored in a namespace:
 
@@ -99,7 +99,7 @@ For example:
     /variable define mymap String secretWord = "banana"
     /variable define mymap Boolean doorOpen = false
 
-These variables persist across script executions and server restarts. They can be accessed from any script that uses the namespace (see :ref:`Namespaces <namespaces>` for details on ``@using`` and the ``::`` specifier).
+These variables persist across script executions and server restarts. They can be accessed from any script that uses the namespace.
 
 If no initial value is provided, variables are initialized to their default state: ``0`` for numeric types, ``""`` for String, ``false`` for Boolean, and ``null`` for complex types.
 
@@ -134,7 +134,7 @@ When modifying a variable using its own value, you can use the shorthand ``+=``,
 
     @define Int count = 5
     @var count += 3
-    @player The count is {{count}} (&acount += 3&r is the same as &acount = count + 3&r)
+    @player The count is {{count}}, since &acount += 3&r is the same as &acount = count + 3&r.
 
 .. code-block:: output
 
@@ -171,7 +171,7 @@ The ``relative`` qualifier creates a per-player variable. Instead of all players
 
 Without ``relative``, if one player sets ``score`` to 100, all players see 100. With ``relative``, each player has their own ``score`` that starts at the default value and changes independently.
 
-Relative variables with a default value can be reset to that value using ``/variable reset``:
+Relative variables with a default value can be reset to that value using ``/variable reset``.
 
 Null
 ----

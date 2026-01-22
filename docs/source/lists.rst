@@ -71,7 +71,7 @@ You can also modify elements by assigning to an index:
 
     [5, 99, 15]
 
-Accessing an index outside the list bounds will tell you that the index is out of bounds for your list size, causing an error.
+Note that trying to access an index outside the list bounds causes an error.
 
 List Methods
 ------------

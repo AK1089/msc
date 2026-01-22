@@ -96,7 +96,7 @@ Arithmetic operators work on numbers:
 .. code-block:: msc
 
     @player {{10 + 3}}, {{10 - 3}}, {{10 * 3}}
-    @player {{10 / 3}, {{10 % 3}}
+    @player {{10 / 3}}, {{10 % 3}}
     @player {{2 ^ 8}}
 
 .. code-block:: output

@@ -32,7 +32,7 @@ When a script starts executing, it begins with an empty local namespace. Variabl
 
 .. code-block:: output
 
-    5: Hello
+    5, Hello
 
 The local namespace has two important properties:
 
@@ -93,9 +93,13 @@ You can use both approaches in the same script. A common pattern is to use ``@us
 .. code-block:: msc
 
     @using mymap
-    @var score = score + 1
     @player Score: {{score}}
-    @player Server time: {{system::currentTimeMillis()}}
+    @player The square root of two is {{math::sqrt(2.0D)}}
+
+.. code-block:: output
+
+    Score: 20
+    The square root of two is 1.4142135623730951
 
 Shadowing
 ---------

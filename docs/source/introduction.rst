@@ -45,7 +45,7 @@ Scripts are represented as:
 .. code-block:: msc
     
     @player Hello there!
-    @bypass /rocket
+    @bypass /give @s minecraft:diamond 1
     @if true
         @player &aTrue
     @else

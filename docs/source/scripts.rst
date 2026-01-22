@@ -41,11 +41,11 @@ Three operators execute Minecraft commands:
 
 .. code-block:: msc
 
-    @command /warp spawn
+    @command /spawn
     @bypass /teleport @s 100 64 200
     @console /say Hello from the server!
 
-All command operators introduce a one-tick delay before continuing. A script with 20 commands takes at least one second to complete.
+All command operators introduce a one-tick (0.05s) delay before continuing. A script with 20 commands takes at least one second to complete.
 
 Branching Operators
 ^^^^^^^^^^^^^^^^^^^
@@ -100,7 +100,7 @@ Control Operators
 
 Control operators affect script timing and execution.
 
-``@delay <time>`` pauses the script for the specified duration. Time can be written as ``5s`` (seconds), ``100t`` (ticks), ``2m`` (minutes), or combinations like ``1m30s``.
+``@delay <time>`` pauses the script for the specified duration. Time can be written as ``5s`` (seconds), ``100t`` (ticks), or ``2m`` (minutes).
 
 .. code-block:: msc
 
@@ -110,7 +110,7 @@ Control operators affect script timing and execution.
 
 ``@cooldown <time>`` prevents the same player from triggering the script again until the cooldown expires. Must appear before any delays.
 
-``@global_cooldown <time>`` prevents any player from triggering the script until the cooldown expires.
+``@global_cooldown <time>`` prevents *any* player from triggering the script again until the cooldown expires. Must appear before any delays.
 
 .. code-block:: msc
 
@@ -118,24 +118,28 @@ Control operators affect script timing and execution.
     @player You found a coin!
     @var coins = coins + 1
 
-``@cancel`` prevents the default interaction (for interact scripts). Useful for buttons that shouldn't visually click.
+``@cancel`` prevents the default interaction (for interact scripts). Useful for buttons that shouldn't visually click. Must appear before any delays.
+
+``@fast`` makes the script execute as fast as possible, ignoring the one-tick delay after commands. Use with caution, as long scripts may cause server lag or cause some commands to fail.
+
+``@slow`` restores normal timing after ``@fast``.
 
 Variable Operators
 ^^^^^^^^^^^^^^^^^^
 
 Variable operators work with data. These are covered in detail in :ref:`Variables <variables>` and :ref:`Expressions <expressions>`.
 
+``@using <namespace>`` sets the active namespace for the rest of the script.
+
 ``@define <Type> <name> [= value]`` creates a local variable.
 
 ``@var <expression>`` modifies a variable or calls a function.
-
-``@using <namespace>`` sets the active namespace for the rest of the script.
 
 .. code-block:: msc
 
     @using mymap
     @define Int temp = score * 2
-    @var score = temp + bonus
+    @var score = temp + 3
 
 Loop Operators
 ^^^^^^^^^^^^^^
@@ -144,17 +148,17 @@ Loop Operators
 
 .. code-block:: msc
 
-    @for Int i in list::range(1, 6)
+    @define Int[] my_list = Int[1, 10, 100, 1000]
+    @for Int i in my_list
         @player Number: {{i}}
     @done
 
 .. code-block:: output
 
     Number: 1
-    Number: 2
-    Number: 3
-    Number: 4
-    Number: 5
+    Number: 10
+    Number: 100
+    Number: 1000
 
 Chat Operators
 ^^^^^^^^^^^^^^
@@ -190,10 +194,10 @@ Chat Operators
 
 If the player clicks "Red", the ``chooseRed()`` function runs and "Blue" becomes unclickable (same group). After 30 seconds, both expire.
 
-Script Parameters
------------------
+Script Variables
+----------------
 
-Scripts have access to built-in parameters depending on their type:
+Scripts have access to built-in variables depending on their type:
 
 ``player`` (Player) is the player who triggered the script. Available in all script types except functions.
 
@@ -203,8 +207,14 @@ Scripts have access to built-in parameters depending on their type:
 
 .. code-block:: msc
 
-    @player You clicked the block at {{block.getX()}}, {{block.getY()}}, {{block.getZ()}}
+    @player Hi, {{player.getName()}}! You clicked the block at {{block.getX()}}, {{block.getY()}}, {{block.getZ()}}.
     @bypass /teleport @s {{player.getLocation().getX()}} 100 {{player.getLocation().getZ()}}
+
+.. code-block:: output
+
+    Hi, Rickyboy320! You clicked the block at 100, 64, -200.
+
+(This example assumes the script is bound to a block at those coordinates.)
 
 Command Reference
 -----------------
@@ -254,35 +264,25 @@ Actions
 Type Parameters
 ^^^^^^^^^^^^^^^
 
-Each type has optional parameters to specify the target:
+Each type has optional parameters to specify the target.
 
-``interact [x y z] [world]`` - If coordinates are omitted, click a block to select it.
+For interact, walk, and ground scripts, you can specify the block coordinates and world. If omitted, you'll be prompted to click a block.
 
-``walk [x y z] [world]`` - Same as interact.
+For entity scripts, you can specify the entity UUID. If omitted, you'll be prompted to click an entity.
 
-``ground [x y z] [world]`` - Same as interact.
+For area scripts, you must specify the WorldGuard region name and world (since you can't click a region).
 
-``entity [uuid] [world]`` - If UUID is omitted, click an entity to select it.
-
-``area [world] <region>`` - Region name is required.
-
-``function <namespace> <function>`` - Namespace and function name are required.
-
-``method <namespace> <Type> <method>`` - For user-defined type methods.
-
-``constructor <namespace> <Signature>`` - For user-defined type constructors, e.g., ``MyType(Int, String)``.
+For functions, methods, and constructors, you must specify the namespace and signature.
 
 Paste.minr.org
 --------------
 
-Writing scripts in Minecraft chat is tedious. MSC supports `paste.minr.org <https://paste.minr.org/>`_, a pastebin where you can write scripts in a proper text editor.
-
-To use it:
+Writing scripts in Minecraft chat is tedious. MSC supports `paste.minr.org <https://paste.minr.org/>`_, an online text editor where you can write scripts. To use it:
 
 1. Write your script at paste.minr.org
-2. Click Save
-3. Copy the ID from the URL (the random characters at the end)
-4. Run ``/script import <type> <id>`` and click the target block/entity
+2. Click Save (or Ctrl+S)
+3. Copy the URL or the identifier at the end (looks like ``ovoguqaxum``)
+4. Run ``/script import <type> <identifier>`` and click the target block/entity
 
 To edit an existing script:
 
