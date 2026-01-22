@@ -8,25 +8,25 @@ Script Operators
 
 .. toctree::
 
-   script_operators
+   operators
 
 Script Anatomy
 ---------------------
 
 .. toctree::
 
-   script_anatomy
+   anatomy
 
 Script Commands
 ---------------------
 
 .. toctree::
 
-   script_commands
+   commands
 
 Paste.minr.org
 -------------------
 
 .. toctree::
 
-   script_paste
+   paste

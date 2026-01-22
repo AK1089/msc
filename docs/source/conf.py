@@ -195,8 +195,6 @@ class MSCLexer(RegexLexer):
             (r'\b\d+(\.\d+)?[DdFf]?\b', Number),
             # Namespace functions (namespace::function)
             (r'(\w+)(::)(\w+)', bygroups(Name.Namespace, Operator, Name.Function)),
-            # Method calls (.method)
-            (r'\.(\w+)', bygroups(Name.Function)),
             # Operators
             (r'[+\-*/%<>=!&|]+', Operator),
             # Parentheses, brackets

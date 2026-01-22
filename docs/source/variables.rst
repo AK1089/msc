@@ -196,6 +196,48 @@ Performing operations on a null value often causes the script to fail with a Nul
 
 Be careful when dealing with constructors that might fail, such as ``Player()`` for offline players or ``Block()`` for unloaded chunks. These might return null, so always check before using the result.
 
+Accessing Other Players' Relative Variables
+-------------------------------------------
+
+Relative variables store a separate value for each player. Normally you access the current player's value, but you can access another player's value using indexing syntax with a Player object:
+
+.. code-block:: console
+
+    /variable define mymap relative Int score = 0
+
+.. code-block:: msc
+
+    @using mymap
+    @player Your score: {{score}}
+    @player Bob's score: {{score[Player("Bob")]}}
+
+If Bob has a score of 50 and you have a score of 30:
+
+.. code-block:: output
+
+    Your score: 30
+    Bob's score: 50
+
+You can also write to another player's relative variable:
+
+.. code-block:: msc
+
+    @using mymap
+    @var score[Player("Bob")] = 100
+    @player Bob's new score: {{score[Player("Bob")]}}
+
+.. code-block:: output
+
+    Bob's new score: 100
+
+Looking up a player by name fails if they're offline. For reliable lookups across sessions, use UUIDs:
+
+.. code-block:: msc
+
+    @player {{score[Player("63664a36-a4c4-4541-a337-dd5639600407")]}}
+
+If a player has no value set for a relative variable, the default value is returned.
+
 Command Reference
 -----------------
 
