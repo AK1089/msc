@@ -209,28 +209,28 @@ Relative variables store a separate value for each player. Normally you access t
 
     @using mymap
     @player Your score: {{score}}
-    @player Bob's score: {{score[Player("Bob")]}}
+    @player Chillers's score: {{score[Player("Chillers")]}}
 
-If Bob has a score of 50 and you have a score of 30:
+If Chillers has a score of 50 and you have a score of 30:
 
 .. code-block:: output
 
     Your score: 30
-    Bob's score: 50
+    Chillers's score: 50
 
 You can also write to another player's relative variable:
 
 .. code-block:: msc
 
     @using mymap
-    @var score[Player("Bob")] = 100
-    @player Bob's new score: {{score[Player("Bob")]}}
+    @var score[Player("Chillers")] = 100
+    @player Chillers's new score: {{score[Player("Chillers")]}}
 
 .. code-block:: output
 
-    Bob's new score: 100
+    Chillers's new score: 100
 
-Looking up a player by name fails if they're offline. For reliable lookups across sessions, use UUIDs:
+Looking up a player by name fails if they're offline. For reliable lookups, use UUIDs instead:
 
 .. code-block:: msc
 

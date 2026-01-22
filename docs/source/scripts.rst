@@ -199,11 +199,13 @@ Script Variables
 
 Scripts have access to built-in variables depending on their type:
 
-``player`` (Player) is the player who triggered the script. Available in all script types except functions.
+``player`` (of type Player) is the player who triggered the script. Available in all script types except functions.
 
-``block`` (Block) is the block the script is bound to. Available in interact, walk, and ground scripts.
+``block`` (of type Block) is the block the script is bound to. Available in interact, walk, and ground scripts.
 
-``entity`` (Entity) is the entity the script is bound to. Available only in entity scripts.
+``entity`` (of type Entity) is the entity the script is bound to. Available only in entity scripts.
+
+``region`` (of type Region) is the WorldGuard region the script is bound to. Available only in area scripts.
 
 .. code-block:: msc
 
