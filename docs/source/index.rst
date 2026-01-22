@@ -20,8 +20,8 @@ Contents
    variables
    expressions
    lists
-   scripts/index
-   functions/index
+   scripts
+   functions
    types
    appendix/index
 
