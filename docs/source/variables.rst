@@ -199,6 +199,11 @@ Be careful when dealing with constructors that might fail, such as ``Player()`` 
 Accessing Other Players' Relative Variables
 -------------------------------------------
 
+.. admonition:: Beginner Note
+    :class: beginner-note
+
+    This section may contain some confusing syntax. Unless you plan to change relative variables for players other than the one triggering the script, you can safely skip this section.
+
 Relative variables store a separate value for each player. Normally you access the current player's value, but you can access another player's value using indexing syntax with a Player object:
 
 .. code-block:: console

@@ -25,7 +25,9 @@ Structure
 
 Each feature will be handled in its own chapter, with chapters slowly building up the required knowledge.
 
-For your first read, it may be best to read from the top to bottom, as the document is structured with this intent. For future reference, the :ref:`Appendix <appendix>` can be used, which contains a summary of all tables, commands, functions, script operators, types, and more features present in the current implementation of MSC 2. If you are unsure how a specific element works, you can always refer back to the table of contents and search it in the main document.
+For your first read, it may be best to read from the top to bottom, as the document is structured with this intent. However, there is sometimes no sensible ordering of two different topics, as each requires some knowledge of the other.
+
+For future reference, the :ref:`Appendix <appendix>` can be used, which contains a summary of all tables, commands, functions, script operators, types, and more features present in the current implementation of MSC 2. If you are unsure how a specific element works, you can always refer back to the table of contents and search it in the main document.
 
 Signposted Sections
 ^^^^^^^^^^^^^^^^^^^

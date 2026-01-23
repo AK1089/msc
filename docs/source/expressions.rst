@@ -88,6 +88,11 @@ Operators
 
 Operators combine values to produce new values. MSC supports arithmetic, comparison, logical, and assignment operators.
 
+.. admonition:: Technical Detail
+   :class: technical-detail
+
+   If you have a background in computer science or mathematics, you will find these operators familiar. You can skip to the next section to see a list of all operators in order of precedence.
+
 Arithmetic Operators
 ^^^^^^^^^^^^^^^^^^^^
 

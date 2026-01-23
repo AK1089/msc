@@ -23,6 +23,30 @@ Scripts must be bound to a trigger: a block, entity, or area. The type of trigge
 
 - **area** scripts trigger when a player enters a WorldGuard region. The script runs once per entry.
 
+Script Variables
+^^^^^^^^^^^^^^^^
+
+Depending on their type, some scripts have special built-in variables with context about the trigger.
+
+- ``player`` (of type Player) is the player triggering the script, available in non-function scripts.
+
+- ``block`` (of type Block) is the block the script is on, available in interact/walk/ground scripts.
+
+- ``entity`` (of type Entity) is the entity the script is bound to, available only in entity scripts.
+
+- ``region`` (of type Region) is the region the script is bound to, available only in area scripts.
+
+.. code-block:: msc
+
+    @player Hi, {{player.getName()}}! You clicked the block at {{block.getX()}}, {{block.getY()}}, {{block.getZ()}}.
+    @bypass /teleport @s {{player.getLocation().getX()}} 100 {{player.getLocation().getZ()}}
+
+.. code-block:: output
+
+    Hi, Rickyboy320! You clicked the block at 100, 64, -200.
+
+(This example assumes the script is bound to a block at those coordinates.)
+
 Script Operators
 ----------------
 
@@ -196,41 +220,27 @@ Chat Operators
 
 If the player clicks "Red", the ``chooseRed()`` function runs and "Blue" becomes unclickable (same group). After 30 seconds, both expire.
 
-Script Variables
-----------------
+Paste.minr.org
+--------------
 
-Scripts have access to built-in variables depending on their type:
+Writing scripts in Minecraft chat is tedious. MSC supports `paste.minr.org <https://paste.minr.org/>`_, an online text editor where you can write scripts. To use it:
 
-``player`` (of type Player) is the player who triggered the script. Available in all script types except functions.
+1. Write your script at paste.minr.org
+2. Click Save (or Ctrl+S)
+3. Copy the URL or the identifier at the end (looks like ``ovoguqaxum``)
+4. Run ``/script import <type> <identifier>`` and click the target block/entity
 
-``block`` (of type Block) is the block the script is bound to. Available in interact, walk, and ground scripts.
+To edit an existing script:
 
-``entity`` (of type Entity) is the entity the script is bound to. Available only in entity scripts.
+1. Run ``/script export <type>`` and click the target
+2. Click the link to view the script on paste.minr.org
+3. Click Edit, make changes, and Save
+4. Import the new version with the new ID
 
-``region`` (of type Region) is the WorldGuard region the script is bound to. Available only in area scripts.
-
-.. code-block:: msc
-
-    @player Hi, {{player.getName()}}! You clicked the block at {{block.getX()}}, {{block.getY()}}, {{block.getZ()}}.
-    @bypass /teleport @s {{player.getLocation().getX()}} 100 {{player.getLocation().getZ()}}
-
-.. code-block:: output
-
-    Hi, Rickyboy320! You clicked the block at 100, 64, -200.
-
-(This example assumes the script is bound to a block at those coordinates.)
+The import command accepts the full URL or just the ID.
 
 Command Reference
 -----------------
-
-Scripts are managed with the ``/script`` command:
-
-.. code-block:: console
-
-    /script <action> <type> [parameters]
-
-Actions
-^^^^^^^
 
 .. list-table::
     :widths: 35 65
@@ -265,6 +275,8 @@ Actions
     * - ``/script undo``
       - Undoes the last script command.
 
+Note that these commands can only be run by admins on the main server. You will have to use the test server to run these commands yourself, or ask an admin to set up scripts for you on the main server.
+
 Type Parameters
 ^^^^^^^^^^^^^^^
 
@@ -284,22 +296,3 @@ For example:
 
     /script create interact 1234 56 -789 Theta @bypass /give @s diamond 1
     
-
-Paste.minr.org
---------------
-
-Writing scripts in Minecraft chat is tedious. MSC supports `paste.minr.org <https://paste.minr.org/>`_, an online text editor where you can write scripts. To use it:
-
-1. Write your script at paste.minr.org
-2. Click Save (or Ctrl+S)
-3. Copy the URL or the identifier at the end (looks like ``ovoguqaxum``)
-4. Run ``/script import <type> <identifier>`` and click the target block/entity
-
-To edit an existing script:
-
-1. Run ``/script export <type>`` and click the target
-2. Click the link to view the script on paste.minr.org
-3. Click Edit, make changes, and Save
-4. Import the new version with the new ID
-
-The import command accepts the full URL or just the ID.

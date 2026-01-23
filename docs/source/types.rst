@@ -391,6 +391,11 @@ User-Defined Types
 
 While built-in types cover most needs, you can create your own types to organize related data. User-defined types group fields (variables) and methods (functions) into a reusable structure.
 
+.. admonition:: Beginner Note
+   :class: beginner-note
+
+   User-defined types are an advanced feature. If you're new to MSC, focus on built-in types first before exploring this section. The rest of this chapter can be revisited when you're more comfortable with MSC scripting and ready to create complex data structures.
+
 Consider a map that tracks player statistics. You might have separate variables for each stat:
 
 .. code-block:: console
