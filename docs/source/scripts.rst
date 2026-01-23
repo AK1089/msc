@@ -276,6 +276,13 @@ For area scripts, you must specify the WorldGuard region name and world (since y
 
 For functions, methods, and constructors, you must specify the namespace and signature.
 
+For example:
+
+.. code-block:: console
+
+    /script create interact 1234 56 -789 Theta @bypass /give @s diamond 1
+    
+
 Paste.minr.org
 --------------
 
@@ -293,4 +300,4 @@ To edit an existing script:
 3. Click Edit, make changes, and Save
 4. Import the new version with the new ID
 
-The import command accepts the full URL, just the ID, or the ID with a file extension (paste.minr.org sometimes adds these).
+The import command accepts the full URL or just the ID.

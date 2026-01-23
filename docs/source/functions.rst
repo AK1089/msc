@@ -3,182 +3,265 @@
 Functions
 =========
 
-Functions are reusable pieces of code that can be called from scripts or other functions. Unlike scripts, which are triggered by events, functions must be called explicitly. Functions can accept parameters, perform operations, and optionally return a value.
+Functions are reusable pieces of code that can be called from scripts or other functions. They solve three common problems in scripting:
+
+1. **Repetition**: When the same sequence of operations appears in multiple scripts, a function lets you write it once and call it from anywhere.
+
+2. **Parameterization**: Functions can take parameters, allowing the same code to operate on different values. Instead of writing separate scripts for teleporting to different locations, you can write one function that takes the destination as a parameter.
+
+3. **Computation**: Functions can return values, allowing you to encapsulate calculations or lookups and use the result in expressions.
+
+Functions are never triggered automatically by the server. Unlike interact or walk scripts, functions only run when explicitly called from another script, function, or chatscript.
 
 .. contents:: Contents
    :local:
 
-Why Use Functions?
-------------------
-
-Functions serve several purposes:
-
-When you find yourself writing the same code in multiple scripts, extract it into a function. Change it once, and all callers benefit.
-
-Functions can break complex scripts into manageable pieces. A script that handles a puzzle might call ``checkSolution()``, ``giveReward()``, and ``resetPuzzle()`` as separate functions.
-
-Functions are required for ``@chatscript``, which needs to call a function when the player clicks a chat message.
-
 Defining Functions
 ------------------
 
-Functions are defined with the ``/function define`` command:
+Functions are defined with a name, an optional return type, and an optional list of parameters. The general form is:
 
 .. code-block:: console
 
-    /function define <namespace> <ReturnType> <name>(<parameters>)
+    /function define <namespace> [ReturnType] <name>([<Type1> <param1>], [<Type2> <param2>], ...)
 
-For a function that returns nothing, omit the return type (or use ``Void``):
-
-.. code-block:: console
-
-    /function define mymap greet()
-    /function define mymap Void greet()
-
-For a function that returns a value:
-
-.. code-block:: console
-
-    /function define mymap Int double(Int x)
-    /function define mymap String formatScore(Int score, String name)
-
-After defining the function, add its body using the script command:
-
-.. code-block:: console
-
-    /script create function mymap greet @player Hello!
-
-Or import from paste.minr.org:
-
-.. code-block:: console
-
-    /script import function mymap greet <paste-id>
-
-Parameters
-----------
-
-Parameters allow functions to work with different values each time they're called. Each parameter has a type and a name:
-
-.. code-block:: console
-
-    /function define mymap givePoints(Player target, Int amount)
-
-When called, the values are copied into the function. Modifying a parameter inside the function does not affect the original variable:
-
-.. code-block:: msc
-
-    @define Int x = 5
-    @var mymap::tryToChange(x)
-    @player x is still {{x}}
-
-.. code-block:: output
-
-    x is still 5
-
-Even if ``tryToChange`` sets its parameter to a different value, ``x`` remains 5.
-
-Parameters must match the expected types. Calling ``givePoints("hello", 10)`` would fail because ``"hello"`` is not a Player.
-
-Return Values
--------------
-
-Functions can return a value using the ``@return`` operator:
+For example, to define a function that takes two integers and returns their sum:
 
 .. code-block:: console
 
     /function define mymap Int add(Int a, Int b)
 
+If the function does not return a value, omit the return type:
+
+.. code-block:: console
+
+    /function define mymap greet(String name)
+
+If the function takes no parameters, use empty parentheses:
+
+.. code-block:: console
+
+    /function define mymap Int getScore()
+    /function define mymap resetAll()
+
+After defining a function, you need to add its body using the script command. This works similarly to creating other script types, using either:
+
+.. code-block:: console
+
+    /script create function mymap add() @return a + b
+    /script import function mymap add() https://paste.minr.org/petojeniwe
+
+Parameters
+----------
+
+Parameters are values passed into a function when it is called. They act as local variables within the function, initialized to the values provided by the caller.
+
+Each parameter has a type and a name. When calling the function, you must provide values that match the parameter types:
+
 .. code-block:: msc
 
-    @return a + b
+    @define Int result = mymap::add(5, 3)
+    @player {{result}}
+
+.. code-block:: output
+
+    8
+
+Parameters use **pass-by-sharing** (sometimes called pass-by-object-reference). This means the function receives a reference to the same object, not a copy. The distinction matters for understanding what changes are visible to the caller.
+
+**Reassignment** does not affect the caller's variable. If you assign a new value to a parameter, only the local binding changes:
+
+.. code-block:: console
+
+    /function define mymap modify(Int x)
+
+.. code-block:: msc
+
+    @var x = x + 100
+    @player Inside function: {{x}}
+
+Calling this function:
+
+.. code-block:: msc
+
+    @define Int value = 5
+    @var mymap::modify(value)
+    @player After function: {{value}}
+
+.. code-block:: output
+
+    Inside function: 105
+    After function: 5
+
+The original ``value`` remains 5 because reassigning ``x`` inside the function only changed the local binding, not the caller's variable.
+
+**Mutation** does affect the original object. If you call methods that modify an object's state, the caller sees those changes:
+
+.. code-block:: msc
+
+    @var mymap::halfHealth(player)
+    @player Your health is now {{player.getHealth()}}
+
+If the function calls ``@var p.setHealth(p.getHealth() / 2)``, the player's health actually changes. Both the caller and the function reference the same Player object, so mutations are visible to both.
+
+This distinction is important when working with objects like Player, Entity, Block, and lists. Reassigning a parameter does nothing to the caller's variable, but calling mutating methods affects the actual object.
+
+It is best to keep the number of parameters reasonable. Functions with many parameters are hard to read, remember, and document. If you find yourself needing many parameters, consider splitting the function into smaller pieces or using a custom type to group related values.
+
+Return Types
+------------
+
+Functions can return a value using the ``@return`` operator. The return type is specified in the function definition:
+
+.. code-block:: console
+
+    /function define mymap Double average(Int a, Int b)
+
+.. code-block:: msc
+
+    @return (a + b) / 2.0
 
 The returned value can be used in expressions:
 
 .. code-block:: msc
 
-    @define Int result = mymap::add(3, 4)
-    @player 3 + 4 = {{result}}
-    @player Doubled: {{mymap::add(3, 4) * 2}}
+    @player The average is {{mymap::average(10, 20)}}
 
 .. code-block:: output
 
-    3 + 4 = 7
-    Doubled: 14
+    The average is 15.0
 
-A function without a return type (or with ``Void``) cannot return a value, and its result cannot be used in expressions:
+When a function has a return type, every ``@return`` statement must provide a value of that type. It is good practice to ensure all code paths end with an explicit ``@return``, even if returning null:
 
 .. code-block:: msc
 
-    @var mymap::greet()                    # OK - standalone call
-    @define String x = mymap::greet()      # Error - greet returns nothing
+    @if someCondition
+        @return "found"
+    @fi
+    @return null
 
-If a function with a return type doesn't explicitly return, it returns ``null``.
+If a function reaches the end without hitting a ``@return``, it implicitly returns null.
+
+When a function should only perform actions without returning a value, omit the return type from the definition. Internally, such functions have the type ``Void``. A Void function cannot be used in expressions (except as a standalone statement), and its ``@return`` operator should not include a value:
+
+.. code-block:: console
+
+    /function define mymap announceScore(Player p)
+
+.. code-block:: msc
+
+    @player {{p.getName()}}'s score is {{mymap::score}}
+    @return
+
+The ``@return`` with no value exits the function early. You can also omit it entirely if the function should run to the end.
 
 Calling Functions
 -----------------
 
-Functions in the current namespace (set by ``@using``) can be called directly:
+Functions are called by name, with arguments in parentheses. If the function is in a different namespace than the current script, use the ``::`` specifier:
+
+.. code-block:: msc
+
+    @var mymap::greet("Alice")
+    @define Int sum = mymap::add(10, 20)
+
+If you have set the namespace with ``@using``, you can call functions directly:
 
 .. code-block:: msc
 
     @using mymap
-    @var greet()
-    @define Int x = add(1, 2)
+    @var greet("Alice")
+    @define Int sum = add(10, 20)
 
-Functions in other namespaces use the ``::`` specifier:
-
-.. code-block:: msc
-
-    @var mymap::greet()
-    @define Int x = mymap::add(1, 2)
-
-Built-in namespace functions work the same way:
+Functions that return a value can be used anywhere an expression is expected:
 
 .. code-block:: msc
 
-    @define Double root = math::sqrt(16.0D)
-    @define Int floor = math::floor(3.7D)
+    @player {{mymap::add(5, 3) * 2}}
+    @if mymap::getScore() > 100
+        @player High score!
+    @fi
 
-Methods are functions that belong to a type. They're called with dot notation:
+.. code-block:: output
+
+    16
+
+Functions that return Void must be called as standalone statements using ``@var``:
 
 .. code-block:: msc
 
-    @define String name = player.getName()
-    @define String upper = "hello".toUpperCase()
-    @var player.sendMessage("Hi!")
+    @var mymap::resetAll()
 
-Functions and Script Flow
+Attempting to use a Void function in an expression will cause an error.
+
+Methods
+-------
+
+Methods are functions that belong to a type. They are called using dot notation on a value of that type:
+
+.. code-block:: msc
+
+    @player {{"hello".toUpperCase()}}
+    @player {{player.getName()}}
+    @var player.closeInventory()
+
+Built-in types like String, Player, Entity, and Block provide many methods. For example, String has methods like ``toUpperCase()``, ``contains()``, ``replace()``, and ``length()``. Player has methods like ``getName()``, ``getHealth()``, ``teleport()``, and ``sendMessage()``.
+
+Methods can be chained when each method returns a value:
+
+.. code-block:: msc
+
+    @player {{"  hello world  ".trim().toUpperCase().replace("WORLD", "THERE")}}
+
+.. code-block:: output
+
+    HELLO THERE
+
+You can also define methods on user-defined types (see :ref:`User Defined Types <user_defined_types>`).
+
+For a complete reference of methods available on each built-in type, see :ref:`Built-in Types <appendix_built_in_types>`.
+
+Control Flow in Functions
 -------------------------
 
-Functions can use the same operators as scripts, including delays and prompts. Be aware that these affect the calling script:
+Functions support all the same operators as regular scripts, including ``@if``, ``@for``, ``@delay``, ``@prompt``, ``@cooldown``, and ``@global_cooldown``.
+
+Be aware that ``@delay`` and ``@prompt`` will pause the calling script while the function waits. If your function uses a 5-second delay, the script that called it will also wait 5 seconds before continuing.
+
+The ``@cooldown`` and ``@global_cooldown`` operators behave differently in functions than in regular scripts. If a function is called while on cooldown, the calling script is terminated with an error. This prevents the function from running but also stops the entire script that tried to call it.
+
+The ``@return`` operator immediately exits the function and returns to the caller:
 
 .. code-block:: msc
 
-    # In a function
-    @player Starting countdown...
-    @delay 3s
-    @player Done!
+    @if score < 0
+        @player Invalid score!
+        @return
+    @fi
+    @player Processing score...
 
-When this function is called, the calling script pauses for 3 seconds.
+If the function has a return type, ``@return`` must include a value. If the function is Void (no return type), ``@return`` should have no value.
 
-Cooldowns in functions work differently. If a function has a ``@cooldown`` and is on cooldown when called, the calling script terminates immediately. This can be useful for rate-limiting, but can also cause unexpected behavior.
+Functions and Chatscripts
+-------------------------
 
-Functions do not have access to the ``player``, ``block``, or ``entity`` parameters that scripts have. If a function needs to work with a player, pass it as a parameter:
+Functions are commonly used with ``@chatscript`` to create clickable chat options. Because chatscripts require a function reference, you must define a function for each clickable action:
 
 .. code-block:: console
 
-    /function define mymap healPlayer(Player p)
+    /function define mymap selectRed()
+    /function define mymap selectBlue()
 
 .. code-block:: msc
 
-    @var p.setHealth(20.0D)
-    @var p.sendMessage("&aYou have been healed!")
+    @chatscript color 60s mymap::selectRed()
+    @player &c[Click for Red]
+    @chatscript color 60s mymap::selectBlue()
+    @player &9[Click for Blue]
 
-Call it from a script:
+When the player clicks one of the colored messages, the corresponding function is called. The group name (``color`` in this example) ensures that clicking one option prevents clicking the others in the same group.
 
-.. code-block:: msc
-
-    @var mymap::healPlayer(player)
+This pattern is useful for creating interactive menus, confirmation prompts, and branching dialogue.
 
 Command Reference
 -----------------
@@ -190,42 +273,14 @@ Command Reference
     * - Command
       - Description
     * - ``/function define <namespace> [ReturnType] <name>(<params>)``
-      - Creates a new function.
-    * - ``/function remove <namespace> <name>``
-      - Deletes a function.
-    * - ``/function info <namespace> <name>``
-      - Shows function details.
-    * - ``/script create function <namespace> <name> <@operator> ...``
-      - Adds a line to the function body.
-    * - ``/script view function <namespace> <name>``
-      - Views the function body.
-    * - ``/script import function <namespace> <name> <id>``
-      - Imports from paste.minr.org.
-    * - ``/script export function <namespace> <name>``
-      - Exports to paste.minr.org.
+      - Creates a new function in a namespace.
+    * - ``/function remove <namespace> <function>``
+      - Deletes a function from a namespace.
+    * - ``/function info <namespace> <function>``
+      - Shows information about a function.
+    * - ``/function execute <expression>``
+      - Executes a function call expression directly.
+    * - ``/script create function <namespace> <function>``
+      - Opens the script editor to add/edit the function body.
 
-Example
--------
-
-A complete example: a function that formats a player's stats.
-
-.. code-block:: console
-
-    /function define mymap String formatStats(Player p, Int score)
-
-.. code-block:: msc
-
-    @define String name = p.getName()
-    @define Double health = p.getHealth()
-    @return "&b" + name + "&r: " + score + " points, " + health + " hearts"
-
-Using it in a script:
-
-.. code-block:: msc
-
-    @using mymap
-    @player {{formatStats(player, score)}}
-
-.. code-block:: output
-
-    &brickyboy320&r: 42 points, 20.0 hearts
+Note that these commands require admin permissions. On the main server, you will need to ask an admin to create functions for you, or use the test server where you have full permissions.
