@@ -27,6 +27,23 @@ Each feature will be handled in its own chapter, with chapters slowly building u
 
 For your first read, it may be best to read from the top to bottom, as the document is structured with this intent. For future reference, the :ref:`Appendix <appendix>` can be used, which contains a summary of all tables, commands, functions, script operators, types, and more features present in the current implementation of MSC 2. If you are unsure how a specific element works, you can always refer back to the table of contents and search it in the main document.
 
+Signposted Sections
+^^^^^^^^^^^^^^^^^^^
+
+Some sections cover behavior that is useful to understand but rarely encountered in practice. These sections are marked with one of two boxes at the top:
+
+.. admonition:: Beginner Note
+   :class: beginner-note
+
+   Green boxes appear in difficult or technical sections and describe a particular situation in which you might encounter weird behavior. If the situation doesn't sound like what you're doing, then feel free to skip ahead to the next section.
+
+.. admonition:: Technical Detail
+   :class: technical-detail
+
+   Red boxes appear in verbose sections with lots of detail or explanation. They provide standard programming terminology and a concise summary. If you're an experienced programmer, the corresponding section can probably be skimmed or skipped.
+
+In both cases, the full explanation follows for those who want it, or for future reference when you encounter the behavior in the wild.
+
 .. _notation:
 
 Notation

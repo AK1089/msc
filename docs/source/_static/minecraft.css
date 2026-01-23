@@ -172,3 +172,27 @@
     0% { background-position: 0% 50%; }
     100% { background-position: 200% 50%; }
 }
+
+/* Custom admonition styles for documentation accessibility */
+
+/* Beginner Note - green, friendly */
+.admonition.beginner-note {
+    background-color: #e8f5e9;
+    border-left: 4px solid #4caf50;
+}
+
+.admonition.beginner-note > .admonition-title {
+    background-color: #c8e6c9;
+    color: #2e7d32;
+}
+
+/* Technical Detail - red/coral, for programmers */
+.admonition.technical-detail {
+    background-color: #ffebee;
+    border-left: 4px solid #e57373;
+}
+
+.admonition.technical-detail > .admonition-title {
+    background-color: #ffcdd2;
+    color: #c62828;
+}

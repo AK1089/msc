@@ -278,6 +278,11 @@ This evaluates as ``((5 > 3) && (2 < 4)) || false``, which becomes ``(true && tr
 Short-Circuit Evaluation
 ------------------------
 
+.. admonition:: Technical Detail
+   :class: technical-detail
+
+   MSC uses *short-circuit evaluation*. With ``&&``, if the left side is false, the right side is skipped (since ``false && anything`` is always false). With ``||``, if the left side is true, the right side is skipped (since ``true || anything`` is always true).
+
 The logical operators ``&&`` and ``||`` use short-circuit evaluation. This means they stop evaluating as soon as the result is determined.
 
 For ``&&``, if the left side is false, then the expression will be false regardless of the right side (as ``false && false`` and ``false && true`` are both false). Therefore, the compiler skips even checking what the right side is. This can have consequences if the right side has side effects (like function calls).

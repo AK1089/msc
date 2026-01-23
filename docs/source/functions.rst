@@ -67,46 +67,65 @@ Each parameter has a type and a name. When calling the function, you must provid
 
     8
 
-Parameters use **pass-by-sharing** (sometimes called pass-by-object-reference). This means the function receives a reference to the same object, not a copy. The distinction matters for understanding what changes are visible to the caller.
+Pass-by-Sharing
+^^^^^^^^^^^^^^^
 
-**Reassignment** does not affect the caller's variable. If you assign a new value to a parameter, only the local binding changes:
+.. admonition:: Beginner Note
+   :class: beginner-note
+
+   You might encounter this if you write a function that takes a list or other object and you expect the function to modify it. If you're just passing numbers or strings and using return values, feel free to skip ahead.
+
+Parameters use *pass-by-sharing* (sometimes called *pass-by-object-reference*). This means the function receives a reference to the same object, not a copy. The distinction matters for understanding what changes are visible to the caller.
+
+Reassignment does not affect the caller's variable. If you assign a new value to a parameter, only the local binding changes:
 
 .. code-block:: console
 
-    /function define mymap modify(Int x)
+    /function define mymap modify(Int[] x)
 
 .. code-block:: msc
 
-    @var x = x + 100
+    @var x = [10, 20, 30]
     @player Inside function: {{x}}
 
 Calling this function:
 
 .. code-block:: msc
 
-    @define Int value = 5
+    @define Int[] value = [1, 2, 3]
     @var mymap::modify(value)
     @player After function: {{value}}
 
 .. code-block:: output
 
-    Inside function: 105
-    After function: 5
+    Inside function: [100, 200, 300]
+    After function: [1, 2, 3]
 
-The original ``value`` remains 5 because reassigning ``x`` inside the function only changed the local binding, not the caller's variable.
+The original ``value`` remains unchanged because reassigning ``x`` inside the function only changed the local binding, not the caller's variable.
 
-**Mutation** does affect the original object. If you call methods that modify an object's state, the caller sees those changes:
+Mutation *does* affect the original object. If you call methods that modify an object's state, the caller sees those changes. If the above function instead used:
 
 .. code-block:: msc
 
-    @var mymap::halfHealth(player)
-    @player Your health is now {{player.getHealth()}}
+    @var x.append(4)
+    @player Inside function: {{x}}
 
-If the function calls ``@var p.setHealth(p.getHealth() / 2)``, the player's health actually changes. Both the caller and the function reference the same Player object, so mutations are visible to both.
+Calling this function:
 
-This distinction is important when working with objects like Player, Entity, Block, and lists. Reassigning a parameter does nothing to the caller's variable, but calling mutating methods affects the actual object.
+.. code-block:: msc
 
-It is best to keep the number of parameters reasonable. Functions with many parameters are hard to read, remember, and document. If you find yourself needing many parameters, consider splitting the function into smaller pieces or using a custom type to group related values.
+    @define Int[] value = [1, 2, 3]
+    @var mymap::modify(value)
+    @player After function: {{value}}
+
+.. code-block:: output
+
+    Inside function: [1, 2, 3, 4]
+    After function: [1, 2, 3, 4]
+
+The original ``value`` now includes the appended 4, because the function mutated the list object that both ``x`` and ``value`` reference, rather than just reassigning ``x`` to point to a new list.
+
+This distinction is important when working with objects like Player, Entity, Block, and lists. Reassigning a parameter does nothing to the caller's variable, but calling mutating methods affects the actual object. If you only need to read values or return new ones, this behavior is usually not a concern.
 
 Return Types
 ------------
@@ -115,17 +134,17 @@ Functions can return a value using the ``@return`` operator. The return type is 
 
 .. code-block:: console
 
-    /function define mymap Double average(Int a, Int b)
+    /function define mymap Double average(Double a, Double b)
 
 .. code-block:: msc
 
-    @return (a + b) / 2.0
+    @return (a + b) / 2
 
 The returned value can be used in expressions:
 
 .. code-block:: msc
 
-    @player The average is {{mymap::average(10, 20)}}
+    @player The average is {{mymap::average(10.0D, 20.0D)}}
 
 .. code-block:: output
 
@@ -217,7 +236,7 @@ Methods can be chained when each method returns a value:
 
     HELLO THERE
 
-You can also define methods on user-defined types (see :ref:`User Defined Types <user_defined_types>`).
+You can also define methods on user-defined types (see :ref:`Types <types>`).
 
 For a complete reference of methods available on each built-in type, see :ref:`Built-in Types <appendix_built_in_types>`.
 
