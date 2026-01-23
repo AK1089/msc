@@ -26,7 +26,9 @@ Scripts must be bound to a trigger: a block, entity, or area. The type of trigge
 Script Operators
 ----------------
 
-Every line in a script begins with an operator that determines what the line does. Operators fall into several categories.
+Every line in a script begins with an operator that determines what the line does. The exception to this is blank lines or comments (lines starting with ``#``), which are ignored.
+
+Operators fall into several categories.
 
 Command Operators
 ^^^^^^^^^^^^^^^^^
