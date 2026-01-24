@@ -1,290 +1,171 @@
- Commands
- ---------------
+.. _appendix_commands:
 
-.. _appendix_commmands_namespace:
+Command Reference
+=================
 
-Namespace
--------------------
+MSC commands are documented in the main chapters. This page provides a quick index to find the command you need.
 
-The parent command is /namespace. All subcommands in the table below will start
-with this parent command.
+.. contents::
+   :local:
+   :depth: 2
 
-
-Table 9.27: Namespace Commands
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - define<name> 
-      - Define a new namespace with label/name *name*.
-
-    * - remove<name> 
-      - Delete a namespace and all variables and functions attached to it.
-
-    * - info<name> 
-      - View metadata about a namespace.
-
-    * - variables <name>
-      - View the definitions and current values of variables in this
-
-        namespace.
-
-    * - functions <name>
-      - View the definitions of the functions in this namespace.
-
-    * - types<name> 
-      - View the types defined in this namespace
-
-.. _appendix_commands_variable:
-
-Variable
------------------
-
-The parent command is /variable. Possible aliases: /var. All subcommands in the table
-below will start with this parent command.
-
-Table 9.28: Variable Commands
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - define<namespace> [qualifiers [...]] <Type> <name> [=expression]
-      - Define a new variable with optional qualifiers, a given
-        
-        name and Type and a possible initial value, supplied by
-        
-        the expression. The expression should resolve to the Type
-        
-        parameter.
-
-    * - remove <namespace> <name>
-      - Delete a variable definition.
-
-    * - set<namespace> <name> <= expression>
-      - Set a variable to the result of an expression. The
-        
-        expression should resolve to the Type of the variable, or
-        
-        null.
-
-    * - info<name> 
-      - View metadata about a variable.
-
-.. _appendix_commands_function:
-
-Function
--------------
-
-The parent command is /function. Aliases: /func. All subcommands in the table below
-will start with this parent command.
-
-
-
-Table 9.29: Function Commands
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - define<namespace> [ReturnType] <functionName([Type name[, ...]])>
-      - Define a function in *namespace* returning a value of the
-        
-        typeReturnType(Void if empty). The function has the
-        
-        name *functionName* and takes any amount of
-        
-        parameters, defined in sets ofType name. Type defines
-        
-        the type of the parameter and name defines the name on
-        
-        which the variable can be addressed. Fails when a
-        
-        function with functionName already exists in the
-        
-        namespace.
-
-    * - remove<namespace> <functionName>
-      - Delete a function definition in a given namespace. This
-        
-        removes the attached scripts.
-
-    * - redefine<namespace> [ReturnType] <functionName([Type name[, ...]])>
-      - Redefine a function. This keeps the associated script, but
-        
-        allows changing the calling parameters or the return type.
-        
-        Will fail when functionName has not been defined yet.
-
-    * - info <name> 
-      - View metadata about a function.
-
-
-.. _appendix_commands_user_types:
-
-User Types
--------------------
-
-The parent command is /type. All subcommands in the table below start with this
-parent command. The method and field subcommands have their own tables.
-
-Table 9.30: Type Commands
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - define <namespace> <Type>
-      - Define a new Type in the *namespace*. Should start with an
-        
-        uppercase character, contain no spaces and only alphanumeric
-        
-        characters.
-
-    * - remove <namespace> <Type>
-      - Deletes a Type, with its associated fields and methods.
-
-    * - info <namespace> <Type>
-      - View metadata about a type.
-
-    * - fields <namespace> <Type>
-      - Display a list of all fields in this Type.
-
-    * - methods <namespace> <Type>
-      - Displays a list of all methods in this Type. Since built-in types
-        
-        are part of every namespace, a built-in type can be inspected
-        
-        too.
-
-    * - constructors <namespace> <Type>
-      - Displays a list of all constructors in this Type. Since built-in
-        
-        types are part of every namespace, a built-in type can be
-        
-        inspected too.
-
-
-.. _appendix_commands_fields:
-
-Fields
+Commands by Category
 --------------------
 
-The parent command is /type field. All subcommands in this table start with this parent
-command.
+Script Commands
+^^^^^^^^^^^^^^^
 
-Table 9.31: Field Commands
+Manage scripts bound to blocks, entities, and regions.
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+**Parent command:** ``/script``
 
-    * - define<namespace> <Type> <Type> <name>
-      - Define a field forType. The field has the given Type and
-        
-        name. Fails when a field with the same name already exists
-        
-        in the type.
+See :ref:`Scripts - Command Reference <scripts>` for full documentation.
 
-    * - remove<namespace> <Type> <name>
-      - Delete a field in Type with the given name.
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
 
-    * - info<namespace> <Type> <name>
-      - View metadata about a field.
+   * - Command
+     - Purpose
+   * - ``/script create <type> ...``
+     - Add lines to a script
+   * - ``/script view <type>``
+     - Display script contents
+   * - ``/script remove <type> [line]``
+     - Delete script or line
+   * - ``/script import/export <type>``
+     - Sync with paste.minr.org
+   * - ``/script copy/paste/wipe``
+     - Bulk operations in WorldEdit selection
 
-.. _appendix_commands_methods:
+Namespace Commands
+^^^^^^^^^^^^^^^^^^
 
-Methods
--------------------
+Manage namespaces that contain variables and functions.
 
-The parent command is /type method. All subcommands in this table start with this
-parent command.
+**Parent command:** ``/namespace``
 
-Table 9.32: Method Commands
+See :ref:`Namespaces - Command Reference <namespaces>` for full documentation.
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
 
-    * - define<namespace> <Type> <ReturnType> methodName([Type name[, ...]])>
-      - Define a method in *Type* returning a value of the type
-        
-        ReturnType. The method has the name *methodName*
-        
-        and takes the specified amount of parameters, defined
-        
-        in sets ofType name. Type defines the type of the
-        
-        parameter and name defines the name on which the
-        
-        variable can be addressed. Fails when a function with
-        
-        methodName already exists in the type.
+   * - Command
+     - Purpose
+   * - ``/namespace define <name>``
+     - Create a new namespace
+   * - ``/namespace remove <name>``
+     - Delete a namespace and its contents
+   * - ``/namespace info <name>``
+     - View namespace metadata
+   * - ``/namespace variables <name>``
+     - List variables in namespace
+   * - ``/namespace functions <name>``
+     - List functions in namespace
+   * - ``/namespace types <name>``
+     - List custom types in namespace
 
-    * - remove<namespace> <Type> <methodName>
-      - Delete a method definition in a given Type. This
-        
-        removes the attached scripts.
+Variable Commands
+^^^^^^^^^^^^^^^^^
 
-    * - redefine<namespace> <Type>[ReturnType] <methodName([Type name[, ...]])>
-      - Redefine a method. This keeps the associated script,
-        
-        but allows to change the calling parameters or the
-        
-        return type. Will fail when methodName has not been
-        
-        defined yet.
+Manage persistent variables within namespaces.
 
-    * - info<name> 
-      - View metadata about a method.
+**Parent command:** ``/variable`` (alias: ``/var``)
 
-.. _appendix_commands_constructors:
+See :ref:`Variables - Command Reference <variables>` for full documentation.
 
-Constructors
------------------
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
 
-The parent command is /type constructor. All subcommands in this table start with
-this parent command.
+   * - Command
+     - Purpose
+   * - ``/variable define <ns> <Type> <name> [= expr]``
+     - Create a persistent variable
+   * - ``/variable remove <ns> <name>``
+     - Delete a variable
+   * - ``/variable set <ns> <name> = <expr>``
+     - Set a variable's value
+   * - ``/variable info <name>``
+     - View variable metadata
 
-Table 9.33: Constructor Commands
+Function Commands
+^^^^^^^^^^^^^^^^^
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-    
-    * - define <namespace> Type([Type name[, ...]])
-      - Define a constructor forType. The constructor takes the
-        
-        specified amount of parameters, defined in sets ofType name.
-        
-        Type defines the type of the parameter and name defines the
-        
-        name on which the variable can be addressed. Fails when a
-        
-        constructor with the same parameter signature already exists in
-        
-        the type.
-    
-    * - remove <namespace> Type([Type name[, ...]])
-      - Delete the constructor with the given parameter signature in the
-        
-        associated Type. This removes the attached scripts.
-    
-    * - info <namespace> Type([Type name[, ...]])
-      - View metadata about a constructor.
+Manage custom functions within namespaces.
 
-.. _appendix_commands_script:
+**Parent command:** ``/function`` (alias: ``/func``)
 
-Script
--------------
+See :ref:`Functions - Command Reference <functions>` for full documentation.
 
-The script command has the following syntax:
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
 
-.. code-block:: console
+   * - Command
+     - Purpose
+   * - ``/function define <ns> [ReturnType] <name(params)>``
+     - Create a function definition
+   * - ``/function remove <ns> <name>``
+     - Delete a function
+   * - ``/function redefine <ns> ...``
+     - Change function signature (keep script)
+   * - ``/function info <name>``
+     - View function metadata
 
-    /script <action> <type> [typeparameters] [actionparameters]
+Type Commands
+^^^^^^^^^^^^^
 
-*action* and[*actionparameters*] are defined in :ref:`Supported actions for script commands <scripts_action>`. 
-*type* and[*typeparameters*] are defined in :ref:`Supported Script Types <scripts_script_types>`. Script operators that
-can be used in script lines are defined in :ref:`Script Operators <script_operators>`.
+Manage custom types with fields, methods, and constructors.
+
+**Parent command:** ``/type``
+
+See :ref:`Types - Command Reference <types>` for full documentation.
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Command
+     - Purpose
+   * - ``/type define <ns> <Type>``
+     - Create a custom type
+   * - ``/type remove <ns> <Type>``
+     - Delete a type
+   * - ``/type info <ns> <Type>``
+     - View type metadata
+   * - ``/type fields/methods/constructors <ns> <Type>``
+     - List type members
+
+**Field subcommands:** ``/type field define/remove/info``
+
+**Method subcommands:** ``/type method define/remove/redefine/info``
+
+**Constructor subcommands:** ``/type constructor define/remove/info``
+
+All Commands at a Glance
+------------------------
+
+.. list-table::
+   :widths: 25 75
+   :header-rows: 1
+
+   * - Parent
+     - Subcommands
+   * - ``/script``
+     - create, view, remove, info, export, import, copy, paste, wipe, count, undo
+   * - ``/namespace``
+     - define, remove, info, variables, functions, types
+   * - ``/variable``
+     - define, remove, set, info
+   * - ``/function``
+     - define, remove, redefine, info
+   * - ``/type``
+     - define, remove, info, fields, methods, constructors
+   * - ``/type field``
+     - define, remove, info
+   * - ``/type method``
+     - define, remove, redefine, info
+   * - ``/type constructor``
+     - define, remove, info

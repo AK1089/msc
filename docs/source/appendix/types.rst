@@ -1,1589 +1,1009 @@
-.. _appendix_built_in_types:
+.. _appendix_types:
 
 Built-in Types
-------------------
+==============
 
+Quick reference for built-in type constructors and methods. For operator compatibility, see :doc:`operators`.
 
 .. contents::
+   :local:
+   :depth: 2
 
-.. _appendix_built_in_types_string:
+Primitives
+----------
 
 String
----------------
-
-A String represents plain text. Any piece of text surrounded with ” is considered a
-String. Script operators that take exactly one string (such as @player, @bypass, @con-
-sole, @command) do not require this (for backwards compatibility and less clutter).
-
-
-.. code-block:: msc
-
-    @player Hey
-    @player "Hey"
-
-.. code-block:: output
-
-    Hey
-    "Hey"
-
-A String will be null when it is referenced before initialization.
-
-.. _appendix_built_in_types_constructors:
-
-Constructors
-------------------------
-
-A string can be created in one of two ways. The first one is using the String literal, and
-the other is the String constructor. The string literal is any piece of text surrounded with
-”. If the String needs to contain a ”, use the backslash to escape the double quotation
-marks, as follows: ”This is escaped:\”. Cool.”
-
-The second way is through a constructor. Available constructors are:
-
-
-Supported constructors for the String type
-
-=========================== ====================================
-=========================== ====================================
-String(String value)            Clone a String.
-String(Int value)               Get the textual value of an Int.
-String(Long value)              Get the textual value of a Long.
-String(Float value)             Get the textual value of a Float.
-String(Boolean value)           Get the textual value of a Boolean.
-String(Double value)            Get the textual value of a Double.
-String(Player value)            Get the Player name in textual form.
-String(Entity value)            Get the Entity UUID in textual form.
-String(Block value)             Get the Block coordinates in textual form.
-String(Item value)              Get the Item in textual form.
-=========================== ====================================
-
-The String literal has an additional property for easier formatting. Within the quotation
-marks it supports string formatting using {{ and }}. Any expression or value represented
-within these double curly brackets will be evaluated and converted to a String. If any
-other type remains within the curly brackets, the appropriate constructor is automatically 
-called to convert it into a String, if any. Admins can use these curly brackets in
-chat to quickly evaluate an expression (for example to see the contents of a variable).
-Do keep in mind that expressions in chat will require the local namespace specifiers to
-specify the namespace, as there is no @using in chat.
-
-For example:
-
-.. code-block:: msc 
-
-    @player {{Player("rickyboy320")}}
-
-.. code-block:: output
-
-    rickyboy320
-
-This works because the String(Player) constructor defaults to the player name in textual
-form. Additionally, script operators that take exactly one string do not take quotation
-marks.
-
-(If required, {{ and }} can be escaped like the quotation marks, using a backslash:\)
-
-.. _appendix_built_in_types_operators:
-
-Operators
-------------------------
-
-Supported operators for the String type
-
-+-----+----------------------------+------------------------------------------------------+
-| \+  |   String                   |   Concatenates two Strings together.                 |  
-|     +----------------------------+------------------------------------------------------+
-|     |   Boolean                  |   Concatenates String and Boolean together, as if    |
-|     |                            |                                                      |  
-|     |                            |   the value were a string.                           |  
-|     |                            |                                                      |  
-|     |                            |   (*”true” +true= ”truetrue”*)                       | 
-|     +----------------------------+------------------------------------------------------+
-|     |   Int, Double, Float, Long |   Concatenates String and the textual value of the   |
-|     |                            |                                                      |  
-|     |                            |   other together.                                    |
-|     +----------------------------+------------------------------------------------------+
-|     |   Player                   |   Concatenates String and the name of the Player     |
-|     |                            |                                                      |     
-|     |                            |   together.                                          |  
-|     +----------------------------+------------------------------------------------------+
-|     |   Entity                   |   Concatenates String and the UUID of the Entity     |
-|     |                            |                                                      |    
-|     |                            |   together.                                          | 
-|     +----------------------------+------------------------------------------------------+ 
-|     |   Block                    |   Concatenates String and the coordinates of Block   |
-|     |                            |                                                      |  
-|     |                            |   together.                                          |
-|     +----------------------------+------------------------------------------------------+  
-|     |   Item                     |   Concatenates String and Item together.             |
-+-----+----------------------------+------------------------------------------------------+
-| ==  |    String                  |   Checks for equality between Strings. This is       |
-|     |                            |                                                      |  
-|     |                            |   case-sensitive. For case-insensitive equality, use |
-|     |                            |                                                      |      
-|     |                            |   .equalsIgnoreCase(). (Returns Boolean with the     |
-|     |                            |                                                      |  
-|     |                            |   result: true if equal).                            |
-+-----+----------------------------+------------------------------------------------------+
-| !=  |    String                  |   Checks for inequality between Strings. (Returns    |
-|     |                            |                                                      |    
-|     |                            |   Boolean with the result: true if not equal).       |
-+-----+----------------------------+------------------------------------------------------+
-
-**Methods**
-
-Supported Methods for the String type
-
-=========================================== ====================================
-=========================================== ====================================
-Boolean **contains**\(String sequence)      Returns true if the String contains
-
-                                            sequence, false otherwise.
-Boolean **equalsIgnoreCase**\(String other) Returns true if the String is equal
-
-                                            except for case to *other*, false otherwise.
-Boolean **matches**\(String regex)          Returns true if the string matches a specified
-                                            regular expression.
-Boolean **startsWith**\(String start)       Returns true if the String starts with a
-                                            specified value.
-Int **indexOf**\(String sequence)           Returns the index the first occurrence
-
-                                            of *sequence* starts at. If the String does
-
-                                            not contain *sequence*, returns -1.
-Int **length**\()                           Returns the length of a String.
-String **replace**\(String old, String new) Replaces all occurrences of *old* with
-                                            
-                                            *new* in the String.
-String **substring**\(Int start, Int end)   Returns a substring starting (inclusive)
-
-                                            at *start* and ending (exclusive) at *end*.
-
-                                            Throws IndexOutOfBoundsException
-
-                                            when *start* or *end* are invalid indices
-
-                                            within the string. Throws
-
-                                            InvalidParameterException when*end*
-
-                                            is smaller than *start*.
-
-String **toLowerCase**\()                   Returns the String in lowercase.
-String **toUpperCase**\()                   Returns the String in uppercase.
-String **trim**\()                          Returns the String with leading and
-                                            trailing whitespace omitted.
-=========================================== ====================================
-
-.. _appendix_built_in_types_int_and_long:
-
-Int & Long
--------------------
-
-The Integer represents whole numbers (-1, 0, 1, 2, etc). Within a computing environment,
-not all numbers can be represented.
-
-The Java standard upholds a max Integer value of :math:`2^{31}`` − 1 and a minimum Integer
-value of :math:`− 2^{31}`. Any number outside of this range will overflow, resulting in a sign flip
-and counting the opposite way. Roughly said: :math:`2^{31}` −1 + 1 =− :math:`2^{31}` (note that this is
-unsupported and can change at any time).
-
-If you need to represent a discrete number outside of this range, you can use Long
-instead. Long has a max value of :math:`2^{63}` −1 and a min value of :math:`− 2^{63}`.
-
-Int and Long are *recessive* types. Any operation with a Float, Double or String will take
-priority and converts the Int or Long to the correct type. The resulting type will always
-be that of the operand. This is exactly why Integer division does not occur when using
-a Double or Float as the operand.
-
-An Int and Long will be 0 when it is referenced before initialization.
-
-**Constructors**
-
-Integers and Longs can be created in one of two ways. The first one is using the Int or
-Long literal, and the other is a constructor.
-
-The Int literal is any whole number: 1, 2, 4, 10, -5.
-
-The Long literal is any whole number followed by L: 1L, 2L, 4L, 10L, -5L.
-
-The second way is through a constructor. Available constructors are:
-
-Supported constructors for the Int and Long type
-
-========================================== ====================================
-========================================== ====================================
-Int(Int value)                              Make an Int from another Int. (Clone operation)
-Int(Long value)                             Cast a Long down to an Int. (Precision loss)
-Int(Float value)                            Discard the decimals and convert a Float to Int.
-Int(Double value)                           Discard the decimals and convert a Double to Int.
-Int(String value)                           Attempt to parse a String into an Int. Only succeeds if the
-
-                                            entire String can be represented as an Int. Throws
-
-                                            NumberFormatException otherwise.
-Long(Int value)                             Upcast an Int to a Long.
-Long(Long value)                            Clone a Long.
-Long(Float value)                           Discard the decimals and convert a Float to Long.
-Long(Double value)                          Discard the decimals and convert a Double to Long.
-Long(String value)                          Attempt to parse a String into an Long. Only succeeds if the
-
-                                            entire String can be represented as a Long. Throws
-
-                                            NumberFormatException otherwise.
-========================================== ====================================
-
-**Operators**
-
-
-Supported operators for the Int and Long type
-
-+-----+----------------------------+------------------------------------------------------+
-| \+  |   String                   |   Concatenates Int and String together, as if the    |  
-|     |                            |                                                      |   
-|     |                            |   value were a string. (2 + ”2” = ”22”)              |  
-|     +----------------------------+------------------------------------------------------+
-|     |   Int, Double, Float, Long |   Adds the value to the numerical value of the       |
-|     |                            |                                                      |  
-|     |                            |   operand.                                           |
-+-----+----------------------------+------------------------------------------------------+
-| \-  |   Int, Double, Float, Long |   Subtracts the operand value from the value.        |
-+-----+----------------------------+------------------------------------------------------+
-| \*  |   Int, Double, Float, Long |   Multiplies the value with the operand value.       |
-+-----+----------------------------+------------------------------------------------------+
-|  /  |   Int, Long                |   Integer divides the value and the operand.         |  
-|     |                            |                                                      |   
-|     |                            |   (5/2 = 2)                                          |  
-|     +----------------------------+------------------------------------------------------+
-|     |   Double, Float            |   Float divides the value and the operand.           |  
-|     |                            |                                                      |  
-|     |                            |   (5/ 2 .0 = 2.5)                                    |
-+-----+----------------------------+------------------------------------------------------+
-|  %  |   Int, Double, Float, Long |   The modulo operation. Finds the remainder after    |
-|     |                            |                                                      |  
-|     |                            |   division. (5 % 2 = 1)                              |  
-+-----+----------------------------+------------------------------------------------------+
-| ==  |   Int, Double, Float, Long |   Returns whether this numerical value and the       |
-|     |                            |                                                      |  
-|     |                            |   other numerical value are *exactly* the same.      |  
-+-----+----------------------------+------------------------------------------------------+
-| !=  |   Int, Double, Float, Long |   Returns whether this numerical value and the       |
-|     |                            |                                                      |  
-|     |                            |   other numerical value are not *exactly* the same.  |  
-+-----+----------------------------+------------------------------------------------------+
-|  <  |   Int, Double, Float, Long |   Returns whether this numerical value is less than  |
-|     |                            |                                                      |  
-|     |                            |   the other numerical value                          |  
-+-----+----------------------------+------------------------------------------------------+
-|  >  |   Int, Double, Float, Long |   Returns whether this numerical value is more than  |
-|     |                            |                                                      |  
-|     |                            |   the other numerical value                          |  
-+-----+----------------------------+------------------------------------------------------+
-| <=  |   Int, Double, Float, Long |   Returns whether this numerical value is less than  |
-|     |                            |                                                      |  
-|     |                            |   or equal to the other numerical value              |  
-+-----+----------------------------+------------------------------------------------------+
-|  >= |   Int, Double, Float, Long |   Returns whether this numerical value is more than  |
-|     |                            |                                                      |  
-|     |                            |   or equal to the other numerical value              |  
-+-----+----------------------------+------------------------------------------------------+
-
-**Methods**
-
-======================= ====================================
-======================= ====================================
-Int floor(Double x)       Returns the floor of a double.
-Int ceiling(Double x)     Returns the ceiling of a double.
-======================= ====================================
-
-.. _appendix_built_in_types_float_and_double:
-
-Float & Double
------------------
-
-The Float and Double represent decimal values (-0.1, 37.5, 42.0, etc.). Internally it uses
-an interesting notation, a bit like the scientific notation to represent numbers. Because
-of this way of representing the numbers (using a floating point), not all numbers are
-represented as accurately. A Float and a Double can both represent a wider range of
-values than the Integer or Long can, but not as precisely.
-
-The Java standard upholds a max Float value of (2− :math:`2^{−23}`` )· :math:`2^{127}` and a minimum
-(positive) Float value of :math:`2^{-149}`. All numbers that can be represented positively can also
-be represented negatively (including 0!). Do note that not all numbers in the range of
-the min and max value can be represented, and that there is more than often a case of
-precision loss.
-
-The Double type can represent numbers more accurately, maintaining a maximum value
-of (2− :math:`2^{-52}` )· :math:`2^{1023}` and a minimum value of :math:`2^{-1074}`. It can represent numbers more
-accurately than a Float, but can still have precision loss. In most cases this should not
-pose a problem.
-
-On top of overflowing, much like the Integer and Long types, the Float and Double
-can also underflow. This occurs when it tries to represent a number between 0 and the
-minimum positive (or negative) value. In most cases this should not be a problem.
-
-An Float and Double will be 0.0 when it is referenced before initialization.
-
-**Constructors**
-
-Floats and Doubles can be created in one of two ways. The first one is using the Float
-or Double literal, and the other is a constructor.
-
-The Float literal is any decimal number: 1.0, 2.0, 4.0, 10.2342, -5.12.
-
-The Double literal is any number followed by D: 1D, 2D, 4.0D, 10.2342D, -5.12D.
-
-The second way is through a constructor. Available constructors are:
-
-Supported constructors for the Float and Double type
-
-========================================== ====================================
-========================================== ====================================
-Float(Int value)                            Cast an Int to a Float.
-Float(Long value)                           Cast a Long down to an Int. (Precision loss)
-Float(Float value)                          Clone a Float.
-Float(Double value)                         Cast a Double to a Float. (Precision loss)
-Float(String value)                         Attempt to parse a String into an Float. Only succeeds if
-
-                                            the entire String can be represented as a Float. Throws
-
-                                            NumberFormatException otherwise.
-Double(Int value)                           Cast an Int to a Double.
-Double(Long value)                          Cast a Long to a Double.
-Double(Float value)                         Upcast a Float to a Double.
-Double(Double value)                        Clone a Double.
-Double(String value)                        Attempt to parse a String into an Double. Only succeeds if
-
-                                            the entire String can be represented as a Double. Throws
-
-                                            NumberFormatException otherwise.
-========================================== ====================================
-
-**Operators**
-
-Supported operators for the Float and Double type
-
-+-----+----------------------------+------------------------------------------------------+
-| \+  |   String                   |   Concatenates Float and String together, as if the  |  
-|     |                            |                                                      |   
-|     |                            |   value were a string. (2.0 + ”2” = ”2.02”)          |  
-|     +----------------------------+------------------------------------------------------+
-|     |   Int, Double, Float, Long |   Adds the value to the numerical value of the       |
-|     |                            |                                                      |  
-|     |                            |   operand.                                           |
-+-----+----------------------------+------------------------------------------------------+
-| \-  |   Int, Double, Float, Long |   Subtracts the operand value from the value.        |
-+-----+----------------------------+------------------------------------------------------+
-| \*  |   Int, Double, Float, Long |   Multiplies the value with the operand value.       |
-+-----+----------------------------+------------------------------------------------------+
-| /   |   Int, Double, Float, Long |   Divides the value and the operand. (5. 0 /2 = 2.5) |
-+-----+----------------------------+------------------------------------------------------+
-|  %  |   Int, Double, Float, Long |   The modulo operation. Finds the remainder after    |
-|     |                            |                                                      |  
-|     |                            |   division. (0.5 % 0.2 = 0.1)                        |  
-+-----+----------------------------+------------------------------------------------------+
-| ==  |   Int, Double, Float, Long |   Returns whether this numerical value and the       |
-|     |                            |                                                      |  
-|     |                            |   other numerical value are *exactly* the same.      |  
-+-----+----------------------------+------------------------------------------------------+
-| !=  |   Int, Double, Float, Long |   Returns whether this numerical value and the       |
-|     |                            |                                                      |  
-|     |                            |   other numerical value are not *exactly* the same.  |  
-+-----+----------------------------+------------------------------------------------------+
-|  <  |   Int, Double, Float, Long |   Returns whether this numerical value is less than  |
-|     |                            |                                                      |  
-|     |                            |   the other numerical value                          |  
-+-----+----------------------------+------------------------------------------------------+
-|  >  |   Int, Double, Float, Long |   Returns whether this numerical value is more than  |
-|     |                            |                                                      |  
-|     |                            |   the other numerical value                          |  
-+-----+----------------------------+------------------------------------------------------+
-| <=  |   Int, Double, Float, Long |   Returns whether this numerical value is less than  |
-|     |                            |                                                      |  
-|     |                            |   or equal to the other numerical value              |  
-+-----+----------------------------+------------------------------------------------------+
-|  >= |   Int, Double, Float, Long |   Returns whether this numerical value is more than  |
-|     |                            |                                                      |  
-|     |                            |   or equal to the other numerical value              |  
-+-----+----------------------------+------------------------------------------------------+
-
-**Methods**
-
-There are no methods contained in the Float and Double type.
-
-.. _built_in_types_boolean:
+^^^^^^
+
+Represents plain text. Any text surrounded by ``"`` is a String literal.
+
+**Default value:** ``null``
+
+**Constructors:**
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``String(String value)``
+     - Clone a String.
+   * - ``String(Int value)``
+     - Convert Int to text.
+   * - ``String(Long value)``
+     - Convert Long to text.
+   * - ``String(Float value)``
+     - Convert Float to text.
+   * - ``String(Double value)``
+     - Convert Double to text.
+   * - ``String(Boolean value)``
+     - Convert Boolean to text (``"true"`` or ``"false"``).
+   * - ``String(Player value)``
+     - Get player name.
+   * - ``String(Entity value)``
+     - Get entity UUID.
+   * - ``String(Block value)``
+     - Get block coordinates.
+   * - ``String(Item value)``
+     - Get item as text.
+
+**Methods:**
+
+.. list-table::
+   :widths: 45 15 40
+   :header-rows: 1
+
+   * - Method
+     - Return Type
+     - Description
+   * - ``contains(String seq)``
+     - Boolean
+     - True if String contains seq.
+   * - ``equalsIgnoreCase(String other)``
+     - Boolean
+     - Case-insensitive equality check.
+   * - ``matches(String regex)``
+     - Boolean
+     - True if String matches regex pattern.
+   * - ``startsWith(String prefix)``
+     - Boolean
+     - True if String starts with prefix.
+   * - ``indexOf(String seq)``
+     - Int
+     - Index of first occurrence, or -1 if not found.
+   * - ``length()``
+     - Int
+     - Number of characters.
+   * - ``replace(String old, String new)``
+     - String
+     - Replace all occurrences of old with new.
+   * - ``substring(Int start, Int end)``
+     - String
+     - Substring from start (inclusive) to end (exclusive).
+   * - ``toLowerCase()``
+     - String
+     - Convert to lowercase.
+   * - ``toUpperCase()``
+     - String
+     - Convert to uppercase.
+   * - ``trim()``
+     - String
+     - Remove leading/trailing whitespace.
+   * - ``split(String delimiter)``
+     - String[]
+     - Split into a list by delimiter.
+
+Int
+^^^
+
+Represents whole numbers. Range: -2,147,483,648 to 2,147,483,647.
+
+**Default value:** ``0``
+
+**Literal:** Any whole number (``42``, ``-7``, ``0``)
+
+**Constructors:**
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``Int(Int value)``
+     - Clone an Int.
+   * - ``Int(Long value)``
+     - Cast Long to Int (precision loss).
+   * - ``Int(Float value)``
+     - Discard decimals.
+   * - ``Int(Double value)``
+     - Discard decimals.
+   * - ``Int(String value)``
+     - Parse String to Int. Throws NumberFormatException if invalid.
+
+**Methods:**
+
+.. list-table::
+   :widths: 35 15 50
+   :header-rows: 1
+
+   * - Method
+     - Return Type
+     - Description
+   * - ``floor(Double x)``
+     - Int
+     - Floor of a double (static).
+   * - ``ceiling(Double x)``
+     - Int
+     - Ceiling of a double (static).
+
+Long
+^^^^
+
+Represents large whole numbers. Range: -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.
+
+**Default value:** ``0``
+
+**Literal:** Number with ``L`` suffix (``42L``, ``-7L``)
+
+**Constructors:**
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``Long(Int value)``
+     - Upcast Int to Long.
+   * - ``Long(Long value)``
+     - Clone a Long.
+   * - ``Long(Float value)``
+     - Discard decimals.
+   * - ``Long(Double value)``
+     - Discard decimals.
+   * - ``Long(String value)``
+     - Parse String to Long. Throws NumberFormatException if invalid.
+
+**Methods:** Same as Int.
+
+Float
+^^^^^
+
+Represents decimal numbers with single precision.
+
+**Default value:** ``0.0``
+
+**Literal:** Any decimal number (``3.14``, ``-0.5``, ``1.0``)
+
+**Constructors:**
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``Float(Int value)``
+     - Cast Int to Float.
+   * - ``Float(Long value)``
+     - Cast Long to Float (precision loss).
+   * - ``Float(Float value)``
+     - Clone a Float.
+   * - ``Float(Double value)``
+     - Cast Double to Float (precision loss).
+   * - ``Float(String value)``
+     - Parse String to Float. Throws NumberFormatException if invalid.
+
+**Methods:** None.
+
+Double
+^^^^^^
+
+Represents decimal numbers with double precision.
+
+**Default value:** ``0.0``
+
+**Literal:** Number with ``D`` suffix (``3.14D``, ``1D``)
+
+**Constructors:**
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``Double(Int value)``
+     - Cast Int to Double.
+   * - ``Double(Long value)``
+     - Cast Long to Double.
+   * - ``Double(Float value)``
+     - Upcast Float to Double.
+   * - ``Double(Double value)``
+     - Clone a Double.
+   * - ``Double(String value)``
+     - Parse String to Double. Throws NumberFormatException if invalid.
+
+**Methods:** None.
 
 Boolean
----------------
+^^^^^^^
 
-The Boolean can either represent *true* or *false*. It is primarily used in branches (such
-as @if, @elseif) or conditions. Booleans contain some additional operators to perform
-boolean logic with.
+Represents ``true`` or ``false``.
 
-A Boolean will be false when it is referenced before initialization.
+**Default value:** ``false``
 
-**Constructors**
+**Literal:** ``true`` or ``false``
 
-Booleans can be created in one of two ways. The first one is using the Boolean literal,
-and the other is a constructor.
+**Constructors:**
 
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
 
-The Boolean literal is either true or false.
+   * - Constructor
+     - Description
+   * - ``Boolean(Boolean value)``
+     - Copy a Boolean.
+   * - ``Boolean(String value)``
+     - Parse ``"true"`` or ``"false"``. Defaults to false.
 
-The second way is through a constructor. Available constructors are:
+**Methods:** None.
 
-
-Supported constructors for the Boolean type
-
-========================================== ====================================
-========================================== ====================================
-Boolean(Boolean)                            Copy a Boolean.
-Boolean(String)                             Parse true or false in string format to a boolean. Defaults to
-
-                                            false.
-========================================== ====================================
-
-**Operators**
-
-
-Supported operators for the Boolean type
-
-===== ========================================== ====================================
-===== ========================================== ====================================
-\+      String                                      Concatenates Boolean and String together, as if the value were a
-                
-                                                    string. (true+ ”true” = ”truetrue”)
-!       (Prefix)                                    Negates the boolean value. (!true = false)
-&&      Boolean                                     ANDs the booleans together. Results in true only if both booleans
-
-                                                    are true. (true && true = true, true && false = false,
-
-                                                    false && false = false)
-||      Boolean                                     ORs the booleans. Results in true when either boolean is true.
-
-                                                    (true || true = true, true || false = true, false || false= false)
-==      Boolean                                     Returns whether two Boolean values are the same (both true, or
-
-                                                    both false).
-!=      Boolean                                     Returns whether two Boolean values are not the same.
-===== ========================================== ====================================
-
-The logical operators && and||are short-circuiting. This means that when reading
-from left to right, one of the operands causes the result to always be true or false, the
-other operand is not evaluated. For example the expression
-
-.. code-block:: console
-
-    @if x != null && x.contains("blue")
-
-will not throw a NullPointerException even if x is null, because the if statement short
-circuits before it reaches the substring expression.
-
-**Methods**
-
-There are no methods contained in the Boolean type.
+Minecraft Objects
+-----------------
 
 Player
---------------------
-
-The Player represents an (online) Minecraft Player. There are a multitude of things
-you can accomplish through supported methods that are generally not directly available
-through commands.
-
-A Player will be null when it is referenced before initialization.
-
-**Constructors**
-
-Table 9.12: Supported constructors for the Player type
-
-========================================== ====================================
-========================================== ====================================
-Player(String value)                        Construct a player from their name or
-
-                                            UUID. Null if the player does not exist.
-Player(Int x, Int y, Int z, String world)   Find a player at these coordinates in the
-
-                                            passed world. Null if the player does not
-
-                                            exist. In the scenario that multiple Players
-
-                                            are in the same location,
-                                            
-                                            nondeterministically returns one Player at
-
-                                            that location.
-Player(String name, Player visibleTo).      Construct a player from their name.
-
-                                            It will return null if a player was found but is not 
-                                            
-                                            visible to visibleTo.
-========================================== ====================================
-
-**Operators**
-
-Table 9.13: Supported operators for the Player type
-
-===== ========================================== ====================================
-===== ========================================== ====================================
-\+      String                                      Concatenates the name of Player and String together.
-==      Player                                      Checks for equality between Players. (Returns true when the players
-
-                                                    are the same player).
-!=      Player                                      Checks for inequality between Players. (Returns true when the
-
-                                                    players are not the same player).
-===== ========================================== ====================================
-
-**Methods**
-
-Table 9.14: Supported Methods for the Player type
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - Float **getFallDistance**\() 
-      - Returns the distance this entity has fallen.
-
-    * - Int **getFireTicks**\() 
-      - Returns the entity’s current fire ticks (ticks before
-      
-        the entity stops being on fire).
-
-    * - **setFireTicks**\(Int ticks) 
-      - Sets the entity’s current fire ticks (ticks before the
-
-        entity stops being on fire).
-
-    * - Double **getX**\() 
-      - Gets the entity’s current x position.
-
-    * - Double **getY**\() 
-      - Gets the entity’s current y position.
-
-    * - Double **getZ**\() 
-      - Gets the entity’s current z position.
-
-    * - Float **getYaw**\() 
-      - Gets the entity’s current rotation around the y axis.
-
-    * - Float **getPitch**\() 
-      - Gets the entity’s current rotation around the x axis.
-      
-    * - String **getWorld**\() 
-      - Gets the current world this entity resides in.
-
-    * - Boolean **isDead**\() 
-      - Returns true if this entity has been marked for
-        
-        removal.
-
-    * - Boolean **isFlying**\() 
-      - Checks to see if this player is currently flying or not.
-
-    * - Boolean **isOnGround**\() 
-      - Returns true if the entity is supported by a block.
-
-        This value is a state updated by the server and is
-
-        not recalculated unless the entity moves.
-
-    * - Boolean **isSneaking**\() 
-      - Returns if the player is in sneak mode.
-
-    * - Boolean **isSprinting**\() 
-      - Gets whether the player is sprinting or not.
-
-    * - **giveExp**\(Int amount) 
-      - Gives the player the amount of experience specified.
-
-    * - Float **getExp**\() 
-      - Gets the players current experience points towards
-      
-        the next level.
-
-    * - **setExp**\(Float exp) 
-      - Sets the players current experience points towards
-
-        the next level.
-
-    * - **giveExpLevels**\(Int amount) 
-      - Gives the player the amount of experience levels
-
-        specified. Levels can be taken by specifying a
-
-        negative amount.
-
-    * - Float **getLevel**\() 
-      - Gets the players current experience level.
-
-    * - **setLevel**\(Int level) 
-      - Sets the players current experience level.
-
-        damage(Double amount) Deals the given amount of damage to
-
-        this entity.
-
-    * - Double **getHealth**\() 
-      - Gets the entity’s health from 0 to
-
-        getMaxHealth(), where 0 is dead.
-
-    * - **setHealth**\(Double health) 
-      - Sets the entity’s health from 0 to
-        
-        getMaxHealth(), where 0 is dead.
-        
-        Throws IllegalArgumentException if
-        
-        the health is <0 or>
-        getMaxHealth().
-
-    * - Double **getMaxHealth**\() 
-      - Gets the maximum health this entity
-
-        has.
-
-    * - **setMaxHealth**\() 
-      - Sets the maximum health this entity
-        
-        has. If the health of the entity is
-        
-        above the value provided it will be
-        
-        clamped to the max value. Only sets
-        
-        the ’base’ max health value, any
-        
-        modifiers changing this value (potions,
-        
-        etc) will applyafterthis value. The
-        
-        value returned by getMaxHealth may
-        
-        deviate from the value set here.
-
-    * - Float **getFoodLevels**\() 
-      - Gets the players current food level.
-
-    * - **setFoodLevel**\(Int value) 
-      - Sets the players current food level.
-
-    * - Float **getSaturation**\() 
-      - Gets the players current saturation
-        
-        level. Saturation is a buffer for food
-        
-        level. Your food level will not drop if
-        
-        you are saturated > 0.
-
-    * - **setSaturation**\(Float value) 
-      - Sets the players current saturation
-        
-        level.
-
-    * - Boolean **isInsideVehicle**\() 
-      - Returns whether this entity is inside a
-        vehicle.
-
-    * - Boolean **leaveVehicle**\() 
-      - Leave the current vehicle. If the entity
-        
-        is currently in a vehicle (and is
-        
-        removed from it), true will be
-        
-        returned, otherwise false will be
-        
-        returned.
-
-    * - **closeInventory()**\ 
-      - Force-closes the currently open
-        
-        inventory view for this player, if any.
-
-    * - Long **getTimePlayed()**\ 
-      - Gets the player’s playtime on the
-        server in milliseconds.
-
-    * - String **getLocale()**\ 
-      - Gets the player’s current locale. The
-        
-        value of the locale String is not
-        
-        defined properly. The vanilla
-        
-        Minecraft client will use lowercase
-        
-        language / country pairs separated by
-        
-        an underscore, but custom resource
-        
-        packs may use any format they wish.
-
-    * - String **getUniqueId**\() 
-      - Gets the UUID of the entity (in string
-        
-        format).
-
-    * - Boolean **isOnline**\() 
-      - Checks if this player is currently
-        
-        online.
-
-    * - Boolean **isOp**\() 
-      - Checks if this Player is a server
-        
-        operator.
-
-    * - String **getRank**\()
-      - Gets the rank of the player.
-
-    * - **setResourcePack**\(String url, String hash) 
-      - Request that the player’s client
-        
-        downloads and switches resource
-        
-        packs.
-
-    * - Item **getItem**\(Int slot) 
-      - Returns the Item found in the slot at the given
-        
-        index.
-
-    * - Item **getItemInMainHand**\() 
-      - Gets a copy of the item the player is currently
-        
-        holding in their main hand.
-
-    * - Item **getItemInOffHand**\() 
-      - Gets a copy of the item the player is currently
-        
-        holding in their off hand.
-
-    * - Item **getBoots**\() 
-      - Return the Item from the boots slot.
-
-    * - Item **getLeggings**\() 
-      - Return the Item from the leg slot.
-
-    * - Item **getChestplate**\() 
-      - Return the Item from the chestplate slot.
-
-    * - Item **getHelmet**\() 
-      - Return the Item from the helmet slot.
-
-    * - **setItem**\(Int slot, Item item) 
-      - Stores the Item at the given index of the
-        
-        inventory. Indexes 0 through 8 refer to the
-        
-        hotbar. 9 through 35 refer to the main
-        
-        inventory, counting up from 9 at the top left
-        
-        corner of the inventory, moving to the right,
-        
-        and moving to the row below it back on the
-        
-        left side when it reaches the end of the row. It
-        
-        follows the same path in the inventory like you
-        
-        would read a book. Indexes 36 through 39
-        
-        refer to the armor slots. Though you can set
-        
-        armor with this method using these indexes,
-        
-        you are encouraged to use the provided
-        
-        methods for those slots. If you attempt to use
-        
-        this method with an index less than 0 or
-        
-        greater than 39, an ArrayIndexOutOfBounds
-        
-        exception will be thrown.
-
-    * - **setItemInMainHand**\(Item item) 
-      - Sets the item the player is holding in their
-        
-        main hand.
-
-    * - **setItemInOffHand**\(Item item) 
-      - Sets the item the player is holding in their off
-        
-        hand.
-        
-    * - **setBoots**\(Item item) 
-      - Put the given Item into the boots slot.    
-
-        does not check if the Item is a boots.
-
-        setLeggings(Item item) Put the given Item into the leg slot. This does
-
-        not check if the Item is a pair of leggings.
-
-    * - **setChestplate**\(Item item) 
-      - Put the given Item into the chestplate slot.
-
-        This does not check if the Item is a chestplate.
-
-        setHelmet(Item item) Put the given Item into the helmet slot. This
-
-        does not check if the Item is a helmet.
-
-    * - Boolean **isPlayingChallenge**\() 
-      - Returns whether the
-
-        player is playing a
-
-        challenge.
-
-    * - String **getCurrentChallenge**\() 
-      - Returns the challenge
-
-        the player is playing.
-
-        Returns null when
-
-        player is not playing any
-
-        challenge.
-
-    * - Int **getChallengePoints**\() 
-      - Returns the amount of
-
-        challenge points the
-
-        player has.
-
-    * - Int **getHexaRecord**\() 
-      - Returns the stage the
-
-        player reached in hexa.
-
-    * - Boolean **hasCompletedChallenge**\(String challengetag) 
-      - Returns whether the
-
-        player has completed the
-
-        specified challenge.
-
-    * - Long **getChallengeTime**\() 
-      - Returns the current time
-
-        the player has spent in
-
-        the challenge. Returns - 1 if the player
-
-        is not in a challenge.
-
-    * - Boolean **isPlayingMap**\() 
-      - Returns whether the
-
-        player is playing a map.
-
-    * - String **getCurrentCheckpoint**\() 
-      - Returns the checkpoint
-
-        the player has. Returns
-
-        null when no checkpoint
-
-        in the current checkpoint
-        
-        mode is set. Returns the
-
-        checkpoint from the
-
-        current checkpoint mode
-
-        (HC or FFA).
-
-    * - Int **getPoints**\() 
-      - Returns the amount of
-
-        FFA points the player
-
-        has.
-
-    * - Int **getSpeedrunScore**\() 
-      - Returns the speedrun score of the player.
-
-    * - Boolean **hasCompletedMap**\(String maptag) 
-      - Returns whether the
-
-        player has completed the
-
-        specified map.
-
-    * - Long **getMapTime**\() 
-      - Returns the current time
-
-        the player has spent in
-
-        the map.
-
-    * - Int **getAttempts**\() 
-      - Get the amount of times
-
-        a player has hit any
-
-        starting checkpoint sign.
-
-    * - String **sendMessage**\(String message) 
-      - Sends a raw message directly to a player.
-
-    * - String **getBedLocationWorld**\()
-      - Returns a String containing the world where 
-
-        the player has set their bed.
-
-    * - Int **countItem**\(String id)
-      - Returns the number of items with Minecraft ID *id*
-
-        that the player has in their inventory.
-
-    * - String **getName**\()
-      - Returns the player's Minecraft username.
-
-    * - String **getDisplayName**\()
-      - Returns the player's display name on the server (e.g. nickname
-        
-        given by /nick)
-
-    * - Location **getLocation**\()
-      - Returns the location of a player. Stringifies to "x y z world". 
-
-    * - **teleport**\(Position position)
-      - Teleports a player to position.
-
-    * - **canSee**\(Player player)
-      - Returns if the player can see the target player (i.e., /hide and /block cause it to fail).
-
-    * - String **getClickedBlockFace**\()​
-      - Returns the clicked block face of the player (e.g. EAST, UP, SOUTH). 
-      
-        Used in interact scripts.   
-
-    * - String **getTargetBlockFace**\(Int distance)
-      - Gets the block face of the block that the player is looking 
-      
-        at (must be within *distance*). Max distance is 120.
-
-    * - Block **getTargetBlock**\(Int distance)
-      - Returns the Block type of the block that the player is looking 
-      
-        at (must be within *distance*). Max distance is 120.
-
-    * - Entity **getTargetEntity**\(Int distance)
-      - Returns the Entity type of the entity that the player is 
-      
-        targeting (must be within *distance*). Max distance is 120.
-
-    * - Void **setGravity**\(Boolean gravity)
-      - Sets gravity to be true or false for the player.
-
-    * - Boolean **hasGravity**\()
-      - Returns whether the player has their gravity true or false.
-    
-    * - Boolean **isGliding**\()
-      - Returns whether the player is gliding.
-
-    * - String **getPlayerWeather**\()
-      - Returns the type of weather the player is currently experiencing.
-
-    * - Void **resetPlayerTime**\()
-      - Resets the player's time to be in sync with the server.
-
-    * - Boolean **dropItem**\(Boolean dropAll)
-      - Drops the item the player is holding. If *dropAll* is true,
-       
-        then the player drops the whole stack.
-
-.. _appendix_built_in_type_entity:
+^^^^^^
+
+Represents an online Minecraft player.
+
+**Default value:** ``null``
+
+**Constructors:**
+
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
+
+   * - Constructor
+     - Description
+   * - ``Player(String nameOrUUID)``
+     - Find player by name or UUID. Returns null if not found.
+   * - ``Player(Int x, Int y, Int z, String world)``
+     - Find player at coordinates. Returns null if not found.
+   * - ``Player(String name, Player visibleTo)``
+     - Find player by name, only if visible to visibleTo.
+
+**Methods:**
+
+.. list-table::
+   :widths: 45 15 40
+   :header-rows: 1
+
+   * - Method
+     - Return Type
+     - Description
+   * - ``getName()``
+     - String
+     - Player's Minecraft username.
+   * - ``getDisplayName()``
+     - String
+     - Player's display name (e.g., nickname).
+   * - ``getUniqueId()``
+     - String
+     - Player's UUID.
+   * - ``getRank()``
+     - String
+     - Player's server rank.
+   * - ``getLocale()``
+     - String
+     - Player's client locale.
+   * - ``getX()``
+     - Double
+     - X coordinate.
+   * - ``getY()``
+     - Double
+     - Y coordinate.
+   * - ``getZ()``
+     - Double
+     - Z coordinate.
+   * - ``getYaw()``
+     - Float
+     - Rotation around Y axis.
+   * - ``getPitch()``
+     - Float
+     - Rotation around X axis.
+   * - ``getWorld()``
+     - String
+     - Current world name.
+   * - ``getLocation()``
+     - Location
+     - Player's location.
+   * - ``teleport(Position pos)``
+     - (void)
+     - Teleport player to position.
+   * - ``getHealth()``
+     - Double
+     - Current health (0 = dead).
+   * - ``setHealth(Double hp)``
+     - (void)
+     - Set health (0 to maxHealth).
+   * - ``getMaxHealth()``
+     - Double
+     - Maximum health.
+   * - ``setMaxHealth(Double hp)``
+     - (void)
+     - Set maximum health.
+   * - ``damage(Double amount)``
+     - (void)
+     - Deal damage to player.
+   * - ``getFoodLevel()``
+     - Float
+     - Current food level.
+   * - ``setFoodLevel(Int level)``
+     - (void)
+     - Set food level.
+   * - ``getSaturation()``
+     - Float
+     - Current saturation level.
+   * - ``setSaturation(Float level)``
+     - (void)
+     - Set saturation level.
+   * - ``getExp()``
+     - Float
+     - XP progress toward next level.
+   * - ``setExp(Float exp)``
+     - (void)
+     - Set XP progress.
+   * - ``getLevel()``
+     - Float
+     - Current XP level.
+   * - ``setLevel(Int level)``
+     - (void)
+     - Set XP level.
+   * - ``giveExp(Int amount)``
+     - (void)
+     - Give XP points.
+   * - ``giveExpLevels(Int amount)``
+     - (void)
+     - Give XP levels (negative to take).
+   * - ``getFallDistance()``
+     - Float
+     - Distance fallen.
+   * - ``getFireTicks()``
+     - Int
+     - Ticks until fire stops.
+   * - ``setFireTicks(Int ticks)``
+     - (void)
+     - Set fire ticks.
+   * - ``getTimePlayed()``
+     - Long
+     - Playtime in milliseconds.
+   * - ``isDead()``
+     - Boolean
+     - True if marked for removal.
+   * - ``isOnline()``
+     - Boolean
+     - True if currently online.
+   * - ``isOp()``
+     - Boolean
+     - True if server operator.
+   * - ``isFlying()``
+     - Boolean
+     - True if flying.
+   * - ``isOnGround()``
+     - Boolean
+     - True if on solid ground.
+   * - ``isSneaking()``
+     - Boolean
+     - True if sneaking.
+   * - ``isSprinting()``
+     - Boolean
+     - True if sprinting.
+   * - ``isGliding()``
+     - Boolean
+     - True if gliding.
+   * - ``isInsideVehicle()``
+     - Boolean
+     - True if in a vehicle.
+   * - ``leaveVehicle()``
+     - Boolean
+     - Leave vehicle. Returns true if was in one.
+   * - ``hasGravity()``
+     - Boolean
+     - True if gravity enabled.
+   * - ``setGravity(Boolean gravity)``
+     - (void)
+     - Enable/disable gravity.
+   * - ``canSee(Player other)``
+     - Boolean
+     - True if can see other player.
+   * - ``sendMessage(String msg)``
+     - (void)
+     - Send a chat message.
+   * - ``closeInventory()``
+     - (void)
+     - Close open inventory.
+   * - ``getItem(Int slot)``
+     - Item
+     - Item in inventory slot.
+   * - ``setItem(Int slot, Item item)``
+     - (void)
+     - Set item in slot.
+   * - ``getItemInMainHand()``
+     - Item
+     - Item in main hand.
+   * - ``setItemInMainHand(Item item)``
+     - (void)
+     - Set main hand item.
+   * - ``getItemInOffHand()``
+     - Item
+     - Item in off hand.
+   * - ``setItemInOffHand(Item item)``
+     - (void)
+     - Set off hand item.
+   * - ``getHelmet()``
+     - Item
+     - Helmet slot item.
+   * - ``setHelmet(Item item)``
+     - (void)
+     - Set helmet.
+   * - ``getChestplate()``
+     - Item
+     - Chestplate slot item.
+   * - ``setChestplate(Item item)``
+     - (void)
+     - Set chestplate.
+   * - ``getLeggings()``
+     - Item
+     - Leggings slot item.
+   * - ``setLeggings(Item item)``
+     - (void)
+     - Set leggings.
+   * - ``getBoots()``
+     - Item
+     - Boots slot item.
+   * - ``setBoots(Item item)``
+     - (void)
+     - Set boots.
+   * - ``countItem(String id)``
+     - Int
+     - Count items of type in inventory.
+   * - ``dropItem(Boolean dropAll)``
+     - Boolean
+     - Drop held item (or stack if dropAll).
+   * - ``setResourcePack(String url, String hash)``
+     - (void)
+     - Request resource pack download.
+   * - ``getTargetBlock(Int distance)``
+     - Block
+     - Block player is looking at (max 120).
+   * - ``getTargetBlockFace(Int distance)``
+     - String
+     - Face of target block (NORTH, UP, etc.).
+   * - ``getTargetEntity(Int distance)``
+     - Entity
+     - Entity player is looking at (max 120).
+   * - ``getClickedBlockFace()``
+     - String
+     - Block face clicked (for interact scripts).
+   * - ``getBedLocationWorld()``
+     - String
+     - World where bed is set.
+   * - ``getPlayerWeather()``
+     - String
+     - Player's current weather type.
+   * - ``resetPlayerTime()``
+     - (void)
+     - Sync player time with server.
+   * - ``isPlayingMap()``
+     - Boolean
+     - True if playing a map.
+   * - ``getMapTime()``
+     - Long
+     - Current map time.
+   * - ``hasCompletedMap(String tag)``
+     - Boolean
+     - True if completed the map.
+   * - ``isPlayingChallenge()``
+     - Boolean
+     - True if in a challenge.
+   * - ``getCurrentChallenge()``
+     - String
+     - Current challenge tag (or null).
+   * - ``getChallengeTime()``
+     - Long
+     - Current challenge time (-1 if not in challenge).
+   * - ``hasCompletedChallenge(String tag)``
+     - Boolean
+     - True if completed the challenge.
+   * - ``getChallengePoints()``
+     - Int
+     - Total challenge points.
+   * - ``getCurrentCheckpoint()``
+     - String
+     - Current checkpoint (or null).
+   * - ``getPoints()``
+     - Int
+     - FFA points.
+   * - ``getAttempts()``
+     - Int
+     - Times hit a starting checkpoint.
+   * - ``getSpeedrunScore()``
+     - Int
+     - Speedrun score.
+   * - ``getHexaRecord()``
+     - Int
+     - Hexa stage reached.
 
 Entity
--------------
+^^^^^^
 
-An Entity is a move-able or dynamic object in the Minecraft world. Animals and mon-
-sters are Entities, but also arrows, item frames and paintings.
+Represents a moveable object in Minecraft (mobs, arrows, item frames, etc.).
 
-An Entity will be null when it is referenced before initialization.
+**Default value:** ``null``
 
-**Constructors**
+**Constructors:**
 
-Table 9.18: Supported constructors for the Entity type
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+   * - Constructor
+     - Description
+   * - ``Entity(String uuid)``
+     - Find entity by UUID. Returns null if not found.
+   * - ``Entity(Int x, Int y, Int z, String world)``
+     - Find entity at coordinates. Returns null if not found.
 
-    * - Entity(String uuid) 
-      - Construct an entity from its UUID.
-      
-        Returns null if it does not exist.
+**Methods:**
 
-    * - Entity(Int x, Int y, Int z, String world) 
-      - Find an entity in the passed world at these
-      
-        coordinates. Returns null if it does not
-      
-        exist. In the scenario that multiple entities
-      
-        are in the same location,
-      
-        nondeterministically returns any entity.
+.. list-table::
+   :widths: 40 15 45
+   :header-rows: 1
 
-
-**Operators**
-
-Table 9.19: Supported operators for the Entity type
-
-.. list-table:: 
-    :widths: 5 10 50
-    :stub-columns: 0
-    
-    * - \+ 
-      - String 
-      - Concatenates the UUID of Entity and String together.
-
-    * - == 
-      - Entity 
-      - Checks for equality between Entities. (Returns true when the entities
-
-        are the same entity).
-
-    * - != 
-      - Entity 
-      - Checks for inequality between Entities. (Returns true when the
-
-        entities are not the same entity).
-
-**Methods**
-
-Table 9.20: Supported Methods for the Entity type
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - String **getEntityType**\() 
-      - Gets the entity’s type. Actual value returned is a
-        
-        ’magic value’ and can change at any spigot or bukkit
-        
-        update.
-
-    * - Double **getX**\() 
-      - Gets the entity’s current x position.
-
-    * - Double **getY**\() 
-      - Gets the entity’s current y position.
-
-    * - Double **getZ**\() 
-      - Gets the entity’s current z position.
-
-    * - Float **getYaw**\() 
-      - Gets the entity’s current rotation around the y axis.
-
-    * - Float **getPitch**\() 
-      - Gets the entity’s current rotation around the x axis.
-
-    * - Double **getVelocityX**\() 
-      - Gets the entity’s current velocity in the x direction.
-
-    * - Double **getVelocityY**\() 
-      - Gets the entity’s current velocity in the x direction.
-
-    * - Double **getVelocityZ**\() 
-      - Gets the entity’s current velocity in the x direction.
-
-    * - String **getWorld**\() 
-      - Gets the current world this entity resides in.
-
-    * - Boolean **isDead**\() 
-      - Returns true if this entity has been marked for removal.
-
-    * - Boolean **isOnGround**\() 
-      - Returns true if the entity is supported by a block. This
-        
-        value is a state updated by the server and is not
-        
-        recalculated unless the entity moves.
-
-    * - **damage**\(Double amount) 
-      - Deals the given amount of damage to this entity.
-
-    * - Double **getHealth**\() 
-      - Gets the entity’s health from 0 to getMaxHealth(),
-
-        where 0 is dead.
-
-    * - **setHealth**\(Double health) 
-      - Sets the entity’s health from 0 to getMaxHealth(),
-        
-        where 0 is dead. Throws IllegalArgumentException if
-        
-        the health is ¡ 0 or ¿ getMaxHealth().
-
-    * - Double **getMaxHealth**\() 
-      - Gets the maximum health this entity has.
-
-    * - **setMaxHealth**\() 
-      - Sets the maximum health this entity has. If the health
-        
-        of the entity is above the value provided it will be set
-        
-        to that value.
-
-    * - String **getUniqueId**\() 
-      - Gets the UUID of the entity (in string format).
-
-    * - Location **getLocation**\()
-      - Returns the location of a entity. Stringifies to "x y z world".
-
-    * - **teleport**\(Position position)
-      - Teleports an entity to position. 
-
-    * - Boolean **addPassenger**\(Entity passenger)
-      - Adds a passenger to a vehicle. Returns false if 
-        
-        could not be done for whatever reason.
-    * - Void **ejectPassenger**\(Entity passenger)
-      - Ejects any passenger from the vehicle.
-
-.. _appendix_built_in_types_block:
+   * - Method
+     - Return Type
+     - Description
+   * - ``getEntityType()``
+     - String
+     - Entity type (magic value, may change).
+   * - ``getUniqueId()``
+     - String
+     - Entity UUID.
+   * - ``getX()``
+     - Double
+     - X coordinate.
+   * - ``getY()``
+     - Double
+     - Y coordinate.
+   * - ``getZ()``
+     - Double
+     - Z coordinate.
+   * - ``getYaw()``
+     - Float
+     - Rotation around Y axis.
+   * - ``getPitch()``
+     - Float
+     - Rotation around X axis.
+   * - ``getVelocityX()``
+     - Double
+     - X velocity.
+   * - ``getVelocityY()``
+     - Double
+     - Y velocity.
+   * - ``getVelocityZ()``
+     - Double
+     - Z velocity.
+   * - ``getWorld()``
+     - String
+     - Current world name.
+   * - ``getLocation()``
+     - Location
+     - Entity's location.
+   * - ``teleport(Position pos)``
+     - (void)
+     - Teleport entity.
+   * - ``isDead()``
+     - Boolean
+     - True if marked for removal.
+   * - ``isOnGround()``
+     - Boolean
+     - True if on solid ground.
+   * - ``getHealth()``
+     - Double
+     - Current health.
+   * - ``setHealth(Double hp)``
+     - (void)
+     - Set health.
+   * - ``getMaxHealth()``
+     - Double
+     - Maximum health.
+   * - ``setMaxHealth(Double hp)``
+     - (void)
+     - Set maximum health.
+   * - ``damage(Double amount)``
+     - (void)
+     - Deal damage.
+   * - ``addPassenger(Entity passenger)``
+     - Boolean
+     - Add passenger. Returns false if failed.
+   * - ``ejectPassenger(Entity passenger)``
+     - (void)
+     - Eject passenger.
 
 Block
----------------
+^^^^^
 
-A Block represents a Block in the Minecraft world. Any valid block (within reasonable
-bounds, 0≤y≤255) can be represented, whether it is an empty (air) block, liquid, or
-a solid block.
+Represents a block in the Minecraft world.
 
-A Block will be null when it is referenced before initialization.
+**Default value:** ``null``
 
+**Constructors:**
 
-**Constructors**
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
 
-Table 9.21: Supported constructors for the Block type
+   * - Constructor
+     - Description
+   * - ``Block(Int x, Int y, Int z, String world)``
+     - Get block at coordinates.
 
-========================================= ========================
-========================================= ========================
-Block(Int x, Int y, Int z, String world)    Get the block at these coordinates in the given world.
-========================================= ========================
+**Methods:**
 
-**Operators**
+.. list-table::
+   :widths: 45 15 40
+   :header-rows: 1
 
-Table 9.22: Supported operators for the Block type
-
-===== ========= ==================================
-===== ========= ==================================
-\+      String      Concatenates the coordinates of Block and String together.
-==      Block       Checks for equality between Blocks. (Returns true when the blocks
-
-                    are the same block).
-!=      Block       Checks for inequality between Blocks. (Returns true when the blocks
-
-                    are not the same block).
-===== ========= ==================================
-
-**Methods**
-
-Table 9.23: Supported Methods for the Block type
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - Int **getBlockPower**\() 
-      - Returns the Redstone power
-        
-        being provided to this block.
-
-    * - Int **getLightLevel**\(() 
-      - Returns the amount of light
-        
-        at this block.
-
-    * - Int **getLightFromBlocks**\() 
-      - Returns the amount of light
-        
-        at this block from nearby
-        
-        blocks.
-
-    * - Int **getLightFromSky**\() 
-      - Returns the amount of light
-        
-        at this block from the sky.
-
-    * - Block **getRelative**\(Int modX, Int modY, Int modZ) 
-      - Gets the block at the given
-        
-        offsets.
-
-    * - String **getBlockType**\() 
-      - Gets the type of this block.
-        
-        Actual value returned is a
-        
-        ’magic value’ and can change
-        
-        at any spigot or bukkit
-        
-        update.
-
-    * - Int **getX**\() 
-      - Returns the x-coordinate of
-        
-        this block.
-
-    * - Int **getY**\() 
-      - Returns the y-coordinate of
-        
-        this block.
-        
-    * - Int **getZ**\() 
-      - Returns the z-coordinate of
-        
-        this block.
-
-    * - String **getWorld**\() 
-      - Returns the world where this
-        
-        block resides in.
-
-    * - Boolean **isBlockIndirectlyPowered**\() 
-      - Returns true if the block is
-        
-        being indirectly powered by
-        
-        Redstone.
-
-    * - Boolean **isBlockPowered**\() 
-      - Returns true if the block is
-        
-        being powered by Redstone.
-
-    * - Boolean **isEmpty**\() 
-      - Returns true if this block is
-        
-        Air.
-
-    * - Boolean **isLiquid**\() 
-      - Returns true if this block is
-        
-        liquid.
-    * - BlockLocation **getLocation**\()
-      - Returns the location of a block. Stringifies to "x y z world". 
-
-.. _appendix_built_in_types_item:
+   * - Method
+     - Return Type
+     - Description
+   * - ``getBlockType()``
+     - String
+     - Block type (magic value, may change).
+   * - ``getX()``
+     - Int
+     - X coordinate.
+   * - ``getY()``
+     - Int
+     - Y coordinate.
+   * - ``getZ()``
+     - Int
+     - Z coordinate.
+   * - ``getWorld()``
+     - String
+     - World name.
+   * - ``getLocation()``
+     - BlockLocation
+     - Block's location.
+   * - ``getRelative(Int x, Int y, Int z)``
+     - Block
+     - Block at relative offset.
+   * - ``getBlockPower()``
+     - Int
+     - Redstone power level.
+   * - ``getLightLevel()``
+     - Int
+     - Total light level.
+   * - ``getLightFromBlocks()``
+     - Int
+     - Light from nearby blocks.
+   * - ``getLightFromSky()``
+     - Int
+     - Light from sky.
+   * - ``isBlockPowered()``
+     - Boolean
+     - True if powered by redstone.
+   * - ``isBlockIndirectlyPowered()``
+     - Boolean
+     - True if indirectly powered.
+   * - ``isEmpty()``
+     - Boolean
+     - True if air.
+   * - ``isLiquid()``
+     - Boolean
+     - True if liquid.
 
 Item
---------------
+^^^^
 
-An Item represents an Item in the Minecraft world. Any valid item can be represented,
-along with the stack size.
+Represents an item stack.
 
+**Default value:** ``null``
 
-An Item will be null when it is referenced before initialization.
+**Constructors:**
 
-**Constructors**
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
 
+   * - Constructor
+     - Description
+   * - ``Item(String item, Int amount)``
+     - Create item by name with stack size. Throws MaterialNotFoundException if invalid.
 
-Table 9.24: Supported constructors for the Item type
+**Methods:**
 
-============================== ===============================
-============================== ===============================
-Item(String item, Int amount)   Create an item from the passed name with a stack
-                                
-                                size of amount. Throws
+.. list-table::
+   :widths: 40 15 45
+   :header-rows: 1
 
-                                MaterialNotFoundException when passed an
-
-                                invalid name.
-============================== ===============================
-
-**Operators**
-
-Table 9.25: Supported operators for the Item type
-
-===== ========== ===============================
-===== ========== ===============================
-\+      String      Concatenates the Item and String together.
-==      Item        Checks for equality between Items. (Returns true when the items
-
-                    match and the stack size is equal).
-!=      Item        Checks for inequality between Items. (Returns true when the blocks
-                    are not the same, and/or the stack size is unequal).
-===== ========== ===============================
-
-**Methods**
-
-Table 9.26: Supported Methods for the Item type
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - Int **getAmount**\() 
-      - Gets the amount of items in this stack.
-
-    * - String **getItemType**\() 
-      - Gets the type of this item.
-
-    * - String **getDisplayName**\()
-      - Returns the custom name of an Item. (Returns null if the
-        Item does not have a custom name).
-
-    * - Int **getMaxStackSize**\() 
-      - Get the maximum stacksize for the material hold in
-
-        this ItemStack. (Returns -1 if it has no idea).
-
-    * - **setAmount**\(Int amount) 
-      - Sets the amount of items in this stack.
-
-    * - **setItemType**\(String item) 
-      - Sets the type of this item. Note that in doing so
-        
-        you will reset the extra data for this stack as well.
-        
-        Throws MaterialNotFoundException when passed
-        
-        an invalid name.
-
-    * - Boolean **isSimilar**\(Item item) 
-      - Returns whether two items are equal, but does not
-        
-        consider stack size (amount).
-
-    * - Boolean **hasDisplayName**\()
-      - Returns true if an Item has a custom name.
-
-.. _appendix_spatial_types:
+   * - Method
+     - Return Type
+     - Description
+   * - ``getItemType()``
+     - String
+     - Item type name.
+   * - ``setItemType(String item)``
+     - (void)
+     - Set item type (resets extra data).
+   * - ``getAmount()``
+     - Int
+     - Stack size.
+   * - ``setAmount(Int amount)``
+     - (void)
+     - Set stack size.
+   * - ``getMaxStackSize()``
+     - Int
+     - Maximum stack size (-1 if unknown).
+   * - ``getDisplayName()``
+     - String
+     - Custom name (null if none).
+   * - ``hasDisplayName()``
+     - Boolean
+     - True if has custom name.
+   * - ``isSimilar(Item item)``
+     - Boolean
+     - True if same type (ignores amount).
 
 Spatial Types
----------------
-Script update 2.2.0 brought spatial built-in types including Location and BlockLocation, to represent points in the Minecraft world.
-
-
-.. _appendix_location:
+-------------
 
 Location
----------------------------
+^^^^^^^^
 
-Location is used to represent a position in a world, especially one that can be occupied by an entity. This is why it uses Doubles (since they can be on any part of a block).
+Represents a position in a world (Double precision).
 
-To obtain a Location from a Player or Entity, call getLocation().  Stringifies to "x y z world". This allows you to easily do something 
+**Constructors:**
 
-**Constructors**
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
 
-Supported constructors for the Location type:
+   * - Constructor
+     - Description
+   * - ``Location(Double x, Double y, Double z, String world)``
+     - Create from coordinates and world.
+   * - ``Location(Vector3 vec, String world)``
+     - Create from vector and world.
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+**Methods:**
 
-    * - Location(Double x, Double y, Double z, String world)
-      - Creates a Location from the passed in coordinates and world.
+.. list-table::
+   :widths: 35 20 45
+   :header-rows: 1
 
-    * - Location(Vector3, String world)
-      - Creates a Location from the passed in vector and world.
-  
-**Methods**
+   * - Method
+     - Return Type
+     - Description
+   * - ``asBlockLocation()``
+     - BlockLocation
+     - Convert to block-aligned location.
+   * - ``asVector2()``
+     - Vector2
+     - Convert to XZ vector.
+   * - ``asVector3()``
+     - Vector3
+     - Convert to XYZ vector.
+   * - ``getRegions()``
+     - Region[]
+     - Get all regions at this location.
 
-Supported operators for the Location type:
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - BlockLocation **asBlockLocation**\()
-      - Converts to a BlockLocation type.
-    * - Vector2 **asVector2**\() 
-      - Converts to a Vector2 type.
-    * - Vector3 **asVector3**\().
-      - Converts to a Vector3 type.
-    * - Region[] Location **getRegions()**
-      - Get all regions that intersect the Location.
-
-.. _appendix_block_location:
+Stringifies to ``"x y z world"``.
 
 BlockLocation
-------------------
+^^^^^^^^^^^^^
 
-BlockLocation is used to represent the position of a block in the world, or any other time you want to keep the position aligned to the block grid. This uses Ints instead, since you can only set which block it is (if you want to choose the part of the block, use Location).
+Represents a block-aligned position (Int precision).
 
-To obtain a BlockLocation of a Block, call getLocation(). Stringifies to "x y z world". This allows you to easily do something like @bypass tp {{loc}}. 
+**Constructors:**
 
-**Constructors**
+.. list-table::
+   :widths: 50 50
+   :header-rows: 1
 
+   * - Constructor
+     - Description
+   * - ``BlockLocation(Int x, Int y, Int z, String world)``
+     - Create from coordinates and world.
+   * - ``BlockLocation(BlockVector3 vec, String world)``
+     - Create from vector and world.
 
-Supported constructors for the BlockLocation type:
+**Methods:**
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+.. list-table::
+   :widths: 35 20 45
+   :header-rows: 1
 
-    * - BlockLocation(Int x, Int y, Int z, String world)
-      - Creates a BlockLocation from the passed in coordinates and world.
+   * - Method
+     - Return Type
+     - Description
+   * - ``set(String block)``
+     - BlockLocation
+     - Change block at location.
+   * - ``asLocation()``
+     - Location
+     - Convert to Location.
+   * - ``asVector2()``
+     - Vector2
+     - Convert to XZ vector.
+   * - ``asVector3()``
+     - Vector3
+     - Convert to XYZ vector.
+   * - ``getRegions()``
+     - Region[]
+     - Get all regions at this location.
 
-    * - BlockLocation(BlockVector3, String world)
-      - Creates a BlockLocation from the passed in vector and world.
-
-**Methods**
-
-Supported operators for the BlockLocation type:
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - BlockLocation **set**\(String block)
-      - Change the block at that location to *block*.
-
-    * - Location **asLocation**\()
-      - Converts to a Location type.
-    * - Vector2 **asVector2**\() 
-      - Converts to a Vector2 type.
-    * - Vector3 **asVector3**\().
-      - Converts to a Vector3 type.
-    * - Region[] BlockLocation **getRegions()**
-      - Get all regions that intersect the BlockLocation.
-
-.. _appendix_position:
+Stringifies to ``"x y z world"``.
 
 Position
-------------
+^^^^^^^^
 
-The Position type is mostly the same as Location, except it also has ``Float yaw``, ``Float pitch``.
+Like Location, but includes yaw and pitch.
 
-**Constructors**
+**Constructors:**
 
+.. list-table::
+   :widths: 55 45
+   :header-rows: 1
 
-Supported constructors for the BlockLocation type:
+   * - Constructor
+     - Description
+   * - ``Position(Double x, Double y, Double z, Float yaw, Float pitch, String world)``
+     - Create with all parameters.
+   * - ``Position(Location loc, Float yaw, Float pitch)``
+     - Create from Location with rotation.
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+**Methods:**
 
-    * - Position(Double x, Double y, Double z, Float yaw, Float pitch, String world)
-      - Creates a position with the given coordinates, yaw, pitch, and world.
+.. list-table::
+   :widths: 30 20 50
+   :header-rows: 1
 
-    * - Position(Location location, Float yaw, Float pitch)
-      - Creates a position with the given Location object, yaw, and pitch.
+   * - Method
+     - Return Type
+     - Description
+   * - ``getYaw()``
+     - Float
+     - Get yaw rotation.
+   * - ``getPitch()``
+     - Float
+     - Get pitch rotation.
+   * - ``asLocation()``
+     - Location
+     - Convert to Location (loses rotation).
 
-**Methods**
+Vector3 / BlockVector3
+^^^^^^^^^^^^^^^^^^^^^^
 
-Supported operators for the BlockLocation type:
+3D vectors for abstract positions.
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+**Constructors:**
 
-    * - **getYaw**\()
-      - Returns the yaw.
+.. list-table::
+   :widths: 45 55
+   :header-rows: 1
 
-    * - **getPitch**\()
-      - Returns the pitch.
+   * - Constructor
+     - Description
+   * - ``Vector3(Double x, Double y, Double z)``
+     - Create continuous vector.
+   * - ``BlockVector3(Int x, Int y, Int z)``
+     - Create block-aligned vector.
 
-    * - Location **asLocation**\()
-      - Converts to a Location type.
+**Methods:**
 
-.. _appendix_vectors:
+.. list-table::
+   :widths: 40 15 45
+   :header-rows: 1
 
-Vector3, BlockVector3, Vector2 and BlockVector2
--------------------------------------------------
+   * - Method
+     - Return Type
+     - Description
+   * - ``length()``
+     - Double/Int
+     - Vector magnitude.
+   * - ``distance(Vector other)``
+     - Double/Int
+     - Distance to another vector (same type).
+   * - ``containedWithin(Vector min, Vector max)``
+     - Boolean
+     - True if within bounding box (same type).
 
-Vector3 and BlockVector3 are intended represent abstract locations in space (in the XYZ field). Vector2 and BlockVector2 are intended to represent abstract locations on the XZ plane (useful if you don't care about the y-value of something). They're also just wrappers for some vector types I found in a library somewhere. You can use them to represent other things if you wish.
+Stringifies to ``"x y z"``.
 
-Like Location vs BlockLocation, BlockVector3 and BlockVector2 are aligned to the block grid while Vector3 and Vector2 are not. Note none of the vectors care about the world.
+Vector2 / BlockVector2
+^^^^^^^^^^^^^^^^^^^^^^
 
-**Constructors**
+2D vectors for XZ plane positions.
 
-Supported constructors for the Vectors:
+**Constructors:**
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+.. list-table::
+   :widths: 45 55
+   :header-rows: 1
 
-    * - Vector3(Double x, Double y, Double z)
-      - Constructor for Vector3
-    * - BlockVector3(Int x, Int y, Int z)
-      - Constructor for BlockVector3
-    * - Vector2(Double x, Double z)
-      - Constructor for Vector2
-    * - BlockVector2(Int x, Int y, Int z)
-      - Constructor for BlockVector2
+   * - Constructor
+     - Description
+   * - ``Vector2(Double x, Double z)``
+     - Create continuous vector.
+   * - ``BlockVector2(Int x, Int z)``
+     - Create block-aligned vector.
 
-**Methods**
+**Methods:** Same as Vector3/BlockVector3.
 
-Supported operators for the BlockLocation type:
-
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
-
-    * - **length**\()
-      - Returns the length of the vector
-
-    * - **distance**\(Vector otherVector)
-      - Returns the distance between two vectors. Note 
-      
-        the vectors must be of the same type.
-
-    * - **containedWithin**\(Vector min, Vector max)
-      - Returns whether a vector is within the bounding box create by two other vectors. 
-       
-        Note the vectors must be of the same type.
-
-Vectors also stringify into "x y z" or "x y" (BlockVector3(4, 12, 17) -> "4 12 17", Vector2(8, 1) -> "8.0 1.0"). This allows you to do stuff like @bypass tp {{vec}}. However as mentioned previously, you can also do Player.teleport(Position) or Entity.teleport(Position).
-
-You can convert them into other types as well. Note you can't go Vector3 <-> BlockVector2 or Vector2 <-> BlockVector3.
-
-.. _appendix_region:
+Stringifies to ``"x z"``.
 
 Region
-----------------
+^^^^^^
 
-The region type serves as a wrapper for WorldGuard regions. You can get Regions to represent existing regions in the world, or create your own on the fly.
+Wrapper for WorldGuard regions.
 
-There's two ways to obtain a Region. You can do ``Region(String id, String world)`` to look up an existing region, and create a wrapper around that (returning null if it doesn't exist). Alternatively, you can construct a Region by giving it some points and a world. If you give it two sets of coordinates (whether it be through integers or BlocKVectors), you'll get a cuboid region. If you give it a list of BlockVector2s, you'll get a polygonal region.
+**Constructors:**
 
-You also have the option when construction a region to give it an id - if you don't, it will be considered an "anonymous region" and be given a random id (please don't rely on what the id is). Note that all regions constructed through scripts are transient and not accessible by WorldGuard, the server, any other part of Minr, or any other plugin. They only exist within the confines of scripts. This means you won't see them if you use the spider eye or /region info, nor will any flags or restrictions applied to them be enforced. Note you can't obtain a transient region with ``Region(String id, String world)``, even if you give it an id.
+.. list-table::
+   :widths: 55 45
+   :header-rows: 1
 
-You can check if a region contains a Player, BlockVector2, BlockVector3, BlockLocation, a coordinate (Int x, Int y, Int z, String world) or any BlockVector2 in a list. The first one is the most important, since we now finally have a native way to check if a player is in a region for @prompt scripts.
+   * - Constructor
+     - Description
+   * - ``Region(String id, String world)``
+     - Look up existing WorldGuard region. Returns null if not found.
+   * - ``Region(BlockVector3 min, BlockVector3 max, String world)``
+     - Create transient cuboid region.
+   * - ``Region(Int x1, Int y1, Int z1, Int x2, Int y2, Int z2, String world)``
+     - Create transient cuboid region.
+   * - ``Region(BlockVector2[] points, String world)``
+     - Create transient polygonal region.
 
-You can check if a region contains a player with region.containsPlayer(). You can use regions constructed on the fly with Region(min, max, world).containsPlayer(player) (where min and max are BlockVector3s), or Region(minX, minY, minZ, maxX, maxY, maxZ, world).containsPlayer(player). You could also use an existing region.
+.. note::
 
-**Methods**
+   Transient regions created via script are not saved to WorldGuard and are not visible to ``/region info`` or the spider eye.
 
-Supported operators for the Region type:
+**Methods:**
 
-.. list-table:: 
-    :widths: 10 50
-    :stub-columns: 0
+.. list-table::
+   :widths: 35 20 45
+   :header-rows: 1
 
-    * - Boolean **containsPlayer**\()
-      - Check if a region contains a player
-    * - Player[] **getPlayersInside**\()
-      - Returns all players currently inside a region
-    * - BlockLocation **getMinimumPoint**\() 
-      - Returns the minimum point of a region.
-    * - BlockLocation **getMaximumPoint**\()
-      - Returns the maximum point of a region.
-    * - Player[] **getMemberPlayers**\()
-      - Returns members of a region.
-    * - String[] **getMemberGroups**\()
-      - Returns the member groups of a region.
-    * - Player[] **getOwningPlayers**\()
-      - Returns the owners of the region.
-    * - String[] **getOwningGroups**\()
-      - Returns the owner groups of a region.
-
-Finally, all Area scripts now have an additional parameter - Region region. This will be a Region type representing the region that the script is tied to. This allows a script to figure out where it is being called from.
+   * - Method
+     - Return Type
+     - Description
+   * - ``containsPlayer(Player p)``
+     - Boolean
+     - True if player is inside region.
+   * - ``getPlayersInside()``
+     - Player[]
+     - All players currently inside.
+   * - ``getMinimumPoint()``
+     - BlockLocation
+     - Minimum corner.
+   * - ``getMaximumPoint()``
+     - BlockLocation
+     - Maximum corner.
+   * - ``getMemberPlayers()``
+     - Player[]
+     - Region members.
+   * - ``getMemberGroups()``
+     - String[]
+     - Member group names.
+   * - ``getOwningPlayers()``
+     - Player[]
+     - Region owners.
+   * - ``getOwningGroups()``
+     - String[]
+     - Owner group names.

@@ -1,165 +1,223 @@
-Built-in Namespaces
-------------------------
+.. _appendix_namespaces:
 
+Built-in Namespaces
+===================
+
+Quick reference for built-in namespace functions. For creating and using namespaces, see :ref:`Namespaces <namespaces>`.
 
 .. contents::
-    
-.. _appendix_system:
+   :local:
+   :depth: 2
 
 system
-----------
+------
 
-The system namespace handles all types of miscellaneous behaviour typically found in the system, such as time.
+Miscellaneous system functions, such as time.
 
-**Variables**
+**Variables:** None
 
-The system namespace contains no variables.
+**Functions:**
 
-**Functions**
+.. list-table::
+   :widths: 35 15 50
+   :header-rows: 1
 
-Table 9.1: Supported Functions for the system namespace
-
-================================= =========================================================================
-================================= =========================================================================
- Long **currentTimeMillis**\()      Returns the current time in milliseconds. Note that                         
-                                                                                                            
-                                    while the unit of time of the return value is a millisecond,                
-                                                                                                            
-                                    the granularity of the value depends on the underlying                      
-                                                                                                            
-                                    operating system and may be larger. For example, many operating             
-                                                                                                           
-                                    systems measure time in units of tens of milliseconds.     
-Double[] **getTPS()**               Returns a list of size 3, containing the average TPS 
-                                    
-                                    over the last 1 minute, 5 minutes and 15 minutes.                 
-================================= =========================================================================
-
+   * - Function
+     - Return Type
+     - Description
+   * - ``currentTimeMillis()``
+     - Long
+     - Returns the current time in milliseconds since Unix epoch (January 1, 1970).
+   * - ``getTPS()``
+     - Double[]
+     - Returns a list of 3 values: average TPS over the last 1, 5, and 15 minutes.
 
 math
---------------------
+----
 
-The math namespace contains a series of common math operations.
+Common mathematical operations.
 
-**Variables**
+**Variables:** None
 
-The math namespace contains no variables.
+**Functions:**
 
+.. list-table::
+   :widths: 40 15 45
+   :header-rows: 1
 
-**Functions**
+   * - Function
+     - Returns
+     - Description
+   * - ``sqrt(Double value)``
+     - Double
+     - Positive square root of value.
+   * - ``abs(Double value)``
+     - Double
+     - Absolute value.
+   * - ``pow(Double value, Double exp)``
+     - Double
+     - Value raised to the power of exp.
+   * - ``randomInt()``
+     - Int
+     - Random integer (full Int range).
+   * - ``randomLong()``
+     - Long
+     - Random long (full Long range).
+   * - ``randomFloat()``
+     - Float
+     - Random float between 0.0 and 1.0.
+   * - ``randomDouble()``
+     - Double
+     - Random double between 0.0 and 1.0.
+   * - ``random(Double min, Double max)``
+     - Double
+     - Random double between min and max.
+   * - ``sin(Double x)``
+     - Double
+     - Sine of x (degrees).
+   * - ``cos(Double x)``
+     - Double
+     - Cosine of x (degrees).
+   * - ``tan(Double x)``
+     - Double
+     - Tangent of x (degrees).
+   * - ``arcsin(Double x)``
+     - Double
+     - Arcsine of x (returns degrees).
+   * - ``arccos(Double x)``
+     - Double
+     - Arccosine of x (returns degrees).
+   * - ``arctan(Double x)``
+     - Double
+     - Arctangent of x (returns degrees).
+   * - ``radsin(Double x)``
+     - Double
+     - Sine of x (radians).
+   * - ``radcos(Double x)``
+     - Double
+     - Cosine of x (radians).
+   * - ``radtan(Double x)``
+     - Double
+     - Tangent of x (radians).
+   * - ``radarcsin(Double x)``
+     - Double
+     - Arcsine of x (returns radians).
+   * - ``radarccos(Double x)``
+     - Double
+     - Arccosine of x (returns radians).
+   * - ``radarctan(Double x)``
+     - Double
+     - Arctangent of x (returns radians).
+   * - ``rad(Double x)``
+     - Double
+     - Convert degrees to radians.
+   * - ``deg(Double x)``
+     - Double
+     - Convert radians to degrees.
 
-Table 9.2: Supported Functions for the math namespace
-
-==============================================  ==============================================================================  
-==============================================  ==============================================================================  
-Double **sqrt**\(Double value)                      Returns the correctly rounded positive square root 
-                                                    
-                                                    of a double 
-Double **abs**\(Double value)                       Returns the absolute value of a double value. 
-                                            
-                                                    If the argument is not negative, the argument is returned. 
-                                            
-                                                    If the argument is negative, the negation of the argument 
-                                                    
-                                                    is returned.
-Double **pow**\(Double value, Double exponent)      Returns the value of the first argument 
-
-                                                    raised to the power of the second argument.
-Int **randomInt**\()                                Returns the next pseudorandom, uniformly 
-                                                    
-                                                    distributed Int value.
-Long **randomLong**\()                              Returns the next pseudorandom, uniformly 
-        
-                                                    distributed Long value.
-Float **randomFloat**\()                            Returns the next pseudorandom, uniformly 
-
-                                                    distributed float value between 0.0 and 1.0.
-
-Double **randomDouble**\()                          Returns the next pseudorandom, uniformly 
-
-                                                    distributed double value between 0.0 and 1.0.
-Double **random**\(Double min, Double max)          Returns the next pseudorandom, uniformly 
-
-                                                    distributed double value between min and max.
-Double **sin**\(Double x)                            Returns the sin of a double  (takes degrees).
-Double **cos**\(Double x)                            Returns the cos of a double (takes degrees). 
-Double **tan**\(Double x)                            Returns the tan of a double (takes degrees).
-Double **arcsin**\(Double x)                         Returns the arcsin of a double (takes degrees).
-Double **arccos**\(Double x)                         Returns the arccos of a double (takes degrees).
-Double **arctan**\(Double x)                         Returns the arctan of a double (takes degrees).
-Double **radsin**\(Double x)                         Returns the sin of a double (takes radians).
-Double **radcos**\(Double x)                         Returns the cos of a double (takes radians).
-Double **radtan**\(Double x)                         Returns the tan of a double (takes radians).
-Double **radarcsin**\(Double x)                      Returns the arcsin of a double (takes radians).
-Double **radarccos**\(Double x)                      Returns the arccos of a double (takes radians).
-Double **radarctan**\(Double x)                      Returns the arctan of a double (takes radians).
-Double **rad**\(Double x)                            Returns the double converted to radians (takes degrees).
-Double **deg**\(Double x)                            Returns the double converted to degrees (takes radians).
-==============================================  ==============================================================================  
-
-
-Most of these functions have special cases with special arguments. View https://docs.oracle.com/javase/10/docs/api/java/lang/Math.html for these cases.
-
+For special cases (NaN, infinity, etc.), see `Java Math documentation <https://docs.oracle.com/javase/10/docs/api/java/lang/Math.html>`_.
 
 util
---------------------
+----
 
-**Variables**
+Utility functions.
 
-The util namespace contains no variables.
+**Variables:** None
 
+**Functions:**
 
-**Functions**
+.. list-table::
+   :widths: 45 15 40
+   :header-rows: 1
 
-Supported Functions for the util namespace
-
-====================================================  ==============================================================================  
-====================================================  ==============================================================================  
-Boolean **executeAndQuerySuccess**\(String command)     Run an /execute Minecraft command and get the success value.
-Int **executeAndQueryResult**\(String command)          Run an /execute Minecraft command and get the result value.
-String **randomUUID**\()                                Randomly generates a UUID.
-====================================================  ==============================================================================  
+   * - Function
+     - Returns
+     - Description
+   * - ``executeAndQuerySuccess(String cmd)``
+     - Boolean
+     - Run an ``/execute`` command and return whether it succeeded.
+   * - ``executeAndQueryResult(String cmd)``
+     - Int
+     - Run an ``/execute`` command and return its result value.
+   * - ``randomUUID()``
+     - String
+     - Generate a random UUID string.
 
 format
---------------------
+------
 
-**Variables**
+String formatting utilities.
 
-The format namespace contains no variables.
+**Variables:** None
 
+**Functions:**
 
-**Functions**
+.. list-table::
+   :widths: 50 15 35
+   :header-rows: 1
 
-Supported Functions for the format namespace
-
-=====================================================  ==============================================================================  
-=====================================================  ==============================================================================  
-**formatDate**\(Long unixDateMillis, String format)     Returns the converted unix date in the format specified by *format*.
-
-=====================================================  ==============================================================================  
+   * - Function
+     - Returns
+     - Description
+   * - ``formatDate(Long millis, String format)``
+     - String
+     - Format a Unix timestamp (milliseconds) using the given format string.
 
 timer
---------------------
+-----
 
-**Variables**
+Timer management functions for maps and challenges.
 
-The timer namespace contains no variables.
+**Variables:** None
 
+**Functions:**
 
-**Functions**
+.. list-table::
+   :widths: 50 15 35
+   :header-rows: 1
 
-Never store a Timer instance in a namespace variable. It will break on you silently. ALWAYS use timer::getCustomTimer().
+   * - Function
+     - Returns
+     - Description
+   * - ``getMapTimer(Player p, String mapcode)``
+     - Timer
+     - Get a player's timer for a map.
+   * - ``getChallengeTimer(Player p, String code)``
+     - Timer
+     - Get a player's timer for a challenge.
+   * - ``getCustomTimer(Player p, String tag)``
+     - Timer
+     - Get a player's custom timer by tag.
+   * - ``getSpecialTimer(Player p, String tag)``
+     - Timer
+     - Get a player's special timer.
+   * - ``removeCustomTimer(Player p, String tag)``
+     - (void)
+     - Remove a custom timer.
+   * - ``formatTime(Long time)``
+     - String
+     - Format a time value as a human-readable string.
 
-Supported Functions for the timer namespace
+.. warning::
 
-===============================================================  ==============================================================================  
-===============================================================  ==============================================================================  
-**getMapTimer**\(Player player, String mapcode)                     Get a player's timer for a map.
-**getChallengeTimer**\(Player player, String challengecode)         Get a player's timer for a challenge.
-**getCustomTimer**\(Player player, String tag)                      Gets a player's custom timer. You can construct custom 
+   Never store Timer instances in namespace variables, as they will break silently. Always use ``timer::getCustomTimer(...)`` to retrieve a fresh reference each time.
 
-                                                                    timers by instantiating the timer::Timer type.
-**getSpecialTimer**\(Player player, String tag)                     
-**removeCustomTimer**\(Player player, String tag)                   Removes a custom timer.
-String **formatTime**\(Long time).                                  Format a time into a string.
-===============================================================  ==============================================================================  
+list
+----
+
+List utility functions.
+
+**Variables:** None
+
+**Functions:**
+
+.. list-table::
+   :widths: 40 15 45
+   :header-rows: 1
+
+   * - Function
+     - Returns
+     - Description
+   * - ``range(Int start, Int end)``
+     - Int[]
+     - Generate a list of consecutive integers from start (inclusive) to end (exclusive).
