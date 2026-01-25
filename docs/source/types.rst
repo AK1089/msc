@@ -156,7 +156,7 @@ Constructors that might fail (like ``Player`` for an offline player or ``Block``
 Methods
 -------
 
-Methods are functions that belong to a type. They are called using dot notation on a value:
+Methods are functions that belong to a type (see also :ref:`Functions <functions>` for standalone functions). They are called using dot notation on a value:
 
 .. code-block:: msc
 
@@ -416,7 +416,7 @@ Now ``PlayerStats`` is a type that can hold fields and methods, just like ``Play
 Creating a Type
 ^^^^^^^^^^^^^^^
 
-Types are created with the ``/type define`` command:
+Types are created with the ``/type define`` command (all type-related commands are listed in the :ref:`Command Reference <appendix_commands>`):
 
 .. code-block:: console
 

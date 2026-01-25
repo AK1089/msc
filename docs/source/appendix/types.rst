@@ -1,4 +1,4 @@
-.. _appendix_types:
+.. _appendix_built_in_types:
 
 Built-in Types
 ==============

@@ -170,7 +170,7 @@ Variable operators work with data. These are covered in detail in :ref:`Variable
 Loop Operators
 ^^^^^^^^^^^^^^
 
-``@for <Type> <name> in <list>`` iterates over a list. The loop body ends with ``@done``.
+``@for <Type> <name> in <list>`` iterates over a list (see :ref:`Lists <lists>`). The loop body ends with ``@done``.
 
 .. code-block:: msc
 
@@ -209,7 +209,7 @@ Chat Operators
         @player &cWrong password.
     @fi
 
-``@chatscript <group> <time> <function>`` makes the next ``@player`` message clickable. Clicking it calls the specified function. Only one chatscript per group can be clicked.
+``@chatscript <group> <time> <function>`` makes the next ``@player`` message clickable. Clicking it calls the specified function (see :ref:`Functions <functions>`). Only one chatscript per group can be clicked.
 
 .. code-block:: msc
 

@@ -243,7 +243,7 @@ For a complete reference of methods available on each built-in type, see :ref:`B
 Control Flow in Functions
 -------------------------
 
-Functions support all the same operators as regular scripts, including ``@if``, ``@for``, ``@delay``, ``@prompt``, ``@cooldown``, and ``@global_cooldown``.
+Functions support all the same operators as regular scripts (see :ref:`Scripts <scripts>`), including ``@if``, ``@for``, ``@delay``, ``@prompt``, ``@cooldown``, and ``@global_cooldown``.
 
 Be aware that ``@delay`` and ``@prompt`` will pause the calling script while the function waits. If your function uses a 5-second delay, the script that called it will also wait 5 seconds before continuing.
 
@@ -264,7 +264,7 @@ If the function has a return type, ``@return`` must include a value. If the func
 Functions and Chatscripts
 -------------------------
 
-Functions are commonly used with ``@chatscript`` to create clickable chat options. Because chatscripts require a function reference, you must define a function for each clickable action:
+Functions are commonly used with ``@chatscript`` (see :ref:`Scripts <scripts>`) to create clickable chat options. Because chatscripts require a function reference, you must define a function for each clickable action:
 
 .. code-block:: console
 

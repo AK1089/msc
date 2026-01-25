@@ -64,7 +64,7 @@ Strings are enclosed in double quotes. To include a quote character inside a str
 
 Ints and Floats are written as plain numbers. Longs require an ``L`` suffix, and Doubles require a ``D`` suffix. Without these suffixes, ``42`` is an Int and ``3.14`` is a Float.
 
-Complex types like Player, Entity, and Block do not have literals. They must be created using constructors:
+Complex types like Player, Entity, and Block do not have literals. They must be created using constructors (see :ref:`Types <types>` for more details):
 
 .. code-block:: msc
 
@@ -76,7 +76,7 @@ Defining Variables
 
 There are two ways to define variables: locally within a script using ``@define``, or persistently within a namespace using the ``/variable define`` command.
 
-Local variables are created with the ``@define`` operator:
+Local variables are created with the ``@define`` operator (see :ref:`Scripts <scripts>` for more on script operators):
 
 .. code-block:: msc
 
@@ -194,7 +194,7 @@ Performing operations on a null value often causes the script to fail with a Nul
         @player That player is not online.
     @fi
 
-Be careful when dealing with constructors that might fail, such as ``Player()`` for offline players or ``Block()`` for unloaded chunks. These might return null, so always check before using the result.
+Be careful when dealing with constructors that might fail, such as ``Player()`` for offline players or ``Block()`` for unloaded chunks. These might return null, so always check before using the result. See :ref:`Built-in Types <appendix_built_in_types>` for which constructors can return null.
 
 Accessing Other Players' Relative Variables
 -------------------------------------------

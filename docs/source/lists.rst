@@ -197,7 +197,7 @@ For Loops
 
    This section explains how to repeat an action for each item in a list. If you're new to programming, this might seem complex, but it's a powerful way to work with collections of data. Feel free to skip this section if you're not ready yet.
 
-The ``@for`` loop iterates over lists. The syntax is ``@for <Type> <variable> in <list>`` and the loop ends with ``@done``:
+The ``@for`` loop iterates over lists (see :ref:`Scripts <scripts>` for all script operators). The syntax is ``@for <Type> <variable> in <list>`` and the loop ends with ``@done``:
 
 .. code-block:: msc
 
@@ -211,7 +211,7 @@ The ``@for`` loop iterates over lists. The syntax is ``@for <Type> <variable> in
     Hello, Bob!
     Hello, Charlie!
 
-The ``list`` namespace provides the ``range()`` function, which generates a list of consecutive integers:
+The ``list`` namespace (see :ref:`Built-in Namespaces <appendix_namespaces>`) provides the ``range()`` function, which generates a list of consecutive integers:
 
 .. code-block:: msc
 

@@ -43,7 +43,7 @@ Many operators and functions accept time parameters using this format:
      - Weeks
      - ``1w`` = 1 week
 
-Used with: ``@delay``, ``@cooldown``, ``@global_cooldown``, ``@prompt``, and ``@chatscript``.
+Used with: ``@delay``, ``@cooldown``, ``@global_cooldown``, ``@prompt``, and ``@chatscript``. See :ref:`Scripts <scripts>` for details on these operators.
 
 Escape Sequences
 ----------------
@@ -73,7 +73,7 @@ Within string literals (``"..."``), use backslash to escape special characters:
 String Interpolation
 --------------------
 
-Use ``{{ }}`` inside strings to embed expressions:
+Use ``{{ }}`` inside strings to embed expressions (see :ref:`Expressions <expressions>` for more details):
 
 .. code-block:: msc
 

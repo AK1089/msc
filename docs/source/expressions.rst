@@ -39,7 +39,7 @@ More complex expressions combine values with *operators*:
     20
     true
 
-Expressions can also include function or method calls:
+Expressions can also include function or method calls (see :ref:`Functions <functions>` and :ref:`Types <types>` for details):
 
 .. code-block:: msc
 
@@ -315,7 +315,7 @@ This behavior is especially useful for null checks:
         @player Target is alive!
     @fi
 
-If ``target`` is null, the ``&&`` short-circuits and ``target.getHealth()`` is never called. This prevents a NullPointerException. Without short-circuit evaluation, checking for null and using the variable would require separate ``@if`` statements.
+If ``target`` is null, the ``&&`` short-circuits and ``target.getHealth()`` is never called. This prevents a NullPointerException. Without short-circuit evaluation, checking for null and using the variable would require separate ``@if`` statements (see :ref:`Scripts <scripts>` for conditional operators).
 
 Type Behavior
 -------------

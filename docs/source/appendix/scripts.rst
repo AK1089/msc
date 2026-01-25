@@ -46,6 +46,8 @@ Scripts are bound to triggers that determine when they execute.
      - Called when creating an instance of a custom type
      - ``this``, (parameters)
 
+.. _appendix_scripts_script_operators:
+
 Script Operators
 ----------------
 

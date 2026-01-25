@@ -3,7 +3,7 @@
 Operator Reference
 ==================
 
-This page documents which type combinations are valid for each operator and what type the result will be.
+This page documents which type combinations are valid for each operator and what type the result will be. For a conceptual overview of operators, see :ref:`Expressions <expressions>`.
 
 .. contents::
    :local:

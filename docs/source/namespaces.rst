@@ -1,3 +1,5 @@
+.. _namespaces:
+
 Namespaces
 ==========
 
@@ -13,9 +15,9 @@ What is a Namespace?
 
 A namespace is a container that holds three kinds of elements:
 
-- **Variables**: Named values that can be read and modified
-- **Functions**: Reusable code blocks that can be called from scripts
-- **Types**: Custom data structures
+- **Variables**: Named values that can be read and modified (see :ref:`Variables <variables>`)
+- **Functions**: Reusable code blocks that can be called from scripts (see :ref:`Functions <functions>`)
+- **Types**: Custom data structures (see :ref:`Types <types>`)
 
 Before using a variable, function, or type in a script, you need to tell the script which namespace to look in. If no namespace is specified, MSC looks in the local namespace by default.
 
@@ -125,7 +127,7 @@ This behavior ensures that adding a new variable to a namespace will never unexp
 Function Namespaces
 -------------------
 
-When a function is called, execution switches to the function's namespace. The function can access variables from its own namespace directly, but must use ``::`` to access variables from other namespaces. Variables can be passed between namespaces through function parameters.
+When a function is called, execution switches to the function's namespace. The function can access variables from its own namespace directly, but must use ``::`` to access variables from other namespaces. Variables can be passed between namespaces through function parameters. For more details on functions, see :ref:`Functions <functions>`.
 
 Command Reference
 -----------------
