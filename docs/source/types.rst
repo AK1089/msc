@@ -175,14 +175,15 @@ Methods can take arguments:
 
 .. code-block:: msc
 
-    @define Block b = Block(100, 64, -200, "Theta")
-    # Get the block one position above this one
-    @define Block above = b.getRelative(0, 1, 0)
-    @player Block above: {{above.getBlockType()}}
+    @define Vector3 initial = Vector3(1.0D, 2.0D, 3.0D)
+    @define Vector3 other = Vector3(4.0D, 5.0D, 6.0D)
+
+    @define Double dot_product = initial.dot(other)
+    @player Dot product: {{dot_product}}
 
 .. code-block:: output
 
-    Block above: AIR
+    Dot product: 32.0
 
 Some methods modify the object (these typically return ``Void``):
 

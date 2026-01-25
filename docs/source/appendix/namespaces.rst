@@ -173,7 +173,7 @@ Common mathematical operations.
      - Description
    * - ``abs(Double value)``
      - Double
-     - Absolute value.
+     - Absolute value (value if positive, -value if negative).
    * - ``sqrt(Double value)``
      - Double
      - Positive square root.
@@ -182,10 +182,10 @@ Common mathematical operations.
      - Base raised to the power of exponent.
    * - ``floor(Double x)``
      - Int
-     - Round down to nearest integer.
+     - Round down to nearest integer (towards negative infinity).
    * - ``ceil(Double x)``
      - Int
-     - Round up to nearest integer.
+     - Round up to nearest integer (towards positive infinity).
    * - ``sin(Double x)``
      - Double
      - Sine of x (degrees).
@@ -251,8 +251,6 @@ minr
 
 Minr-specific map and challenge utilities.
 
-**Types:**
-
 .. list-table::
    :widths: 30 70
    :header-rows: 1
@@ -270,8 +268,6 @@ scoreboard
 ----------
 
 Minecraft scoreboard manipulation.
-
-**Functions:**
 
 .. list-table::
    :widths: 55 15 30

@@ -9,20 +9,6 @@ This page documents which type combinations are valid for each operator and what
    :local:
    :depth: 2
 
-Important Notes
----------------
-
-**Left-to-right evaluation:** MSC evaluates expressions strictly left to right with no operator precedence. Use parentheses to control order:
-
-.. code-block:: msc
-
-   @define Int x = 2 + 3 * 4    # x = 20, not 14!
-   @define Int x = 2 + (3 * 4)  # x = 14
-
-**Type coercion:** When mixing numeric types, the result follows this hierarchy: Double > Float > Long > Int. The result type is the "larger" of the two operands.
-
-**Short-circuit evaluation:** ``&&`` and ``||`` short-circuit. If the left operand determines the result, the right operand is not evaluated.
-
 Arithmetic Operators
 --------------------
 

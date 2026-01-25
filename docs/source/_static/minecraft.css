@@ -173,10 +173,6 @@
     100% { background-position: 200% 50%; }
 }
 
-table.docutils td:first-child code {
-    white-space: nowrap;
-}
-
 table.docutils {
     table-layout: auto;
     width: 100%;
