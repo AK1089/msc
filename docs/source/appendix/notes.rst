@@ -43,7 +43,7 @@ Many operators and functions accept time parameters using this format:
      - Weeks
      - ``1w`` = 1 week
 
-Used with: ``@delay``, ``@cooldown``, ``@global_cooldown``, ``@prompt``, ``@chatscript``
+Used with: ``@delay``, ``@cooldown``, ``@global_cooldown``, ``@prompt``, and ``@chatscript``.
 
 Escape Sequences
 ----------------

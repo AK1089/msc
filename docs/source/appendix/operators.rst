@@ -254,6 +254,10 @@ Returns the remainder after division.
    @player {{5 % 2}}       # 1
    @player {{0.5 % 0.2}}   # 0.1
 
+Note that modulo with floating-point types can produce imprecise results due to how floating-point arithmetic works.
+
+Also, modulo with negative numbers follows the same sign rules as Java's `%` operator. This means the result has the same sign as the dividend (left operand). For example, ``(-5) % 2`` yields ``-1`` rather than ``2``.
+
 Comparison Operators
 --------------------
 
@@ -436,7 +440,7 @@ Returns true only if both operands are true.
 
 .. code-block:: msc
 
-   # Safe null check - won't throw NullPointerException
+   # Safe null check which won't throw a NullPointerException
    @if player != null && player.isOnline()
        @player You are online!
    @fi
